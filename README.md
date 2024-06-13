@@ -16,7 +16,7 @@ Here's a quick rundown of the main files in this repository:
 
 5. `portrait_white.JPG` - This is the profile picture you'll see on the website.
 
-6. `google696093bb3cb499ff.html` - This is a Google verification file.
+6. `googlec2995e9a70e56991.html` - This is a Google verification file.
 
 ## Let's Connect
 
