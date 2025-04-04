@@ -128,7 +128,7 @@ nav ul li a:active {
     /* Revert to normal flow */
     display: flex;
     justify-content: center;
-    padding: 5px 0; /* Reduced top padding further */
+    padding: 0; /* Removed all padding to move higher */
     /* Removed absolute positioning properties */
 }
 
