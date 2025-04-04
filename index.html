@@ -6,7 +6,7 @@
     <link rel="icon" href="portrait_white3.JPG" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Researching complex systems, AI and biology.">
+    <meta name="description" content="With a mixed background in molecular biology and computational science, I am exploring the cross-pollination of natural and artificial systems. My interests include network models, multi-agent systems (collective intelligence) and an information-theoretical view on biology. I am currently working on bridging the gap between generative AI and morphogenesis / evolution through the lens of diffusion models.">
     <meta name="google-site-verification" content="7b2EoPiJlz9dzJ_8gLOGPkzaub943fv7ISb9Ul_ptsA" />
     <script type="application/ld+json">
     {
@@ -21,7 +21,7 @@
         <!-- "https://www.seedbiomed.com/", -->
         "https://www.linkedin.com/in/marcello-barylli-20b006177"
     ],
-    "jobTitle": "Computational Scientist"
+    "jobTitle": "AI Researcher"
     }
     </script>
 </head>
@@ -32,21 +32,307 @@
                 <img class="profile" src="portrait_white2.JPG" alt="Profile picture of Marcello Barylli">
                 <h1>Marcello Barylli</h1>
             </div>
-            <p> Researching complex systems, AI and biology.
+            <p> With a mixed background in molecular biology and computational science, I am exploring the cross-pollination of natural and artificial systems. My interests include network models, multi-agent systems exhibiting <a href="https://marcellobarylli.substack.com/p/artificial-intelligence-and-collective" target="_blank" rel="noopener noreferrer">collective intelligence</a> and an information-theoretical view on biology. I am currently working on bridging the gap between generative AI and morphogenesis / evolution through the lens of diffusion models.
             <!-- <p> At the intersection of complexity science and artificial intelligence. Researching collective systems, graph neural networks and biology. -->
             </p>
             <nav>
                 <ul>
                     <li><a href="https://github.com/marcellobarylli" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Github profile">🚀</span> Github</a></li>
                     <li><a href="mailto:marcello.barylli@gmail.com" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Email Link">📬</span> Email</a></li>
-                    <!-- <li><a href="https://www.seedbiomed.com/" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to SEED Biomed">🧬</span> Biomed</a></li> -->
+                    <li><a href="https://scholar.google.com/citations?user=Hq68F_IAAAAJ&hl=en&oi=sra" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Google Scholar">🎓</span> Research</a></li>
                     <li><a href="MarcelloBarylliCV.pdf" download><span role="img" aria-label="Link to download CV">📜</span> CV</a></li>
-                    <li><a href="https://twitter.com/marcellobarylli" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Twitter profile">🐦</span> Twitter</a></li>
+                    <li><a href="https://twitter.com/marcellobarylli" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to X profile">🐦</span> Twitter</a></li>
                     <li><a href="https://marcellobarylli.substack.com/archive" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Blog">📝</span> Blog</a></li>
                     <li><a href="https://www.linkedin.com/in/marcello-barylli-20b006177" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="LinkedIn profile link">💼</span> LinkedIn</a></li>
                 </ul>
             </nav>
         </div>
     </header>
+
+    <section class="animation-section">
+        <div id="diffusion-container" class="diffusion-container">
+            <!-- Particles will be generated here by JavaScript -->
+        </div>
+    </section>
+
+    <script>
+        const container = document.getElementById('diffusion-container');
+        const particleCount = 200;
+        const particles = [];
+        const diffusionTime = 5000; // Increased duration (milliseconds)
+        const pauseTime = 500; // Pause
+
+        let isDiffused = false;
+        let animationTimeoutId = null;
+
+        let containerWidth = container.offsetWidth;
+        let containerHeight = container.offsetHeight;
+        let centerX = containerWidth / 2;
+        let centerY = containerHeight / 2;
+
+        // --- Define Submarine Shape Points ---
+        const submarinePoints = [
+            { x: -0.8, y: 0.0 },   // 0: Nose tip
+            { x: -0.6, y: 0.2 },   // 1
+            { x: -0.3, y: 0.25 },  // 2
+            { x: -0.25, y: 0.25 }, // 3: Base of tower front
+            { x: -0.2, y: 0.5 },   // 4: Top front of tower
+            { x: 0.1, y: 0.55 },  // 5: Top middle of tower
+            { x: 0.15, y: 0.5 },  // 6: Top back of tower
+            { x: 0.20, y: 0.25 }, // 7: Base of tower back
+            { x: 0.3, y: 0.25 },  // 8
+            { x: 0.6, y: 0.2 },   // 9
+            // Tail section modified to include fin
+            { x: 0.8, y: 0.1 },   // 10: Top of tail fin base
+            { x: 0.95, y: 0.05 }, // 11: Top-rear corner of fin
+            { x: 0.95, y: -0.05 },// 12: Bottom-rear corner of fin
+            { x: 0.8, y: -0.1 },  // 13: Bottom of tail fin base
+            // Bottom edge of hull moving forwards
+            { x: 0.6, y: -0.2 },   // 14
+            { x: 0.3, y: -0.25 },  // 15
+            { x: 0.0, y: -0.25 }, // New Middle Bottom Point (16)
+            { x: -0.3, y: -0.25 }, // 17 (was 16)
+            { x: -0.6, y: -0.2 },   // 18 (was 17)
+            { x: -0.8, y: 0.0 }    // Connects back to point 0 (19)
+        ];
+        // Removed topFinPoints array
+
+        // Periscope Coordinates (lowered top)
+        const periscopeLine = [
+            { x: 0.0, y: 0.55 }, // Start on tower (same)
+            { x: 0.0, y: 0.65 }, // Go straight up to the bend (was 0.7)
+            { x: 0.15, y: 0.65 } // Go horizontally forward/right (was 0.7)
+        ];
+        // Coordinates for window centers
+        const windowCenters = [
+            { x: -0.3, y: 0.0 }, // Left window
+            { x: 0.0,  y: 0.0 }, // Center window
+            { x: 0.3,  y: 0.0 }  // Right window
+        ];
+
+        // --- Helper: Generate Gaussian Random Numbers ---
+        function generateGaussianPair() {
+            let u1 = 0, u2 = 0;
+            while (u1 === 0) u1 = Math.random();
+            u2 = Math.random();
+            const R = Math.sqrt(-2.0 * Math.log(u1));
+            const theta = 2.0 * Math.PI * u2;
+            const z0 = R * Math.cos(theta);
+            const z1 = R * Math.sin(theta);
+            return [z0, z1];
+        }
+
+        // --- Create Particles ---
+        function createParticles() {
+            if (!container) return; // Exit if container not found
+
+            containerWidth = container.offsetWidth;
+            containerHeight = container.offsetHeight;
+            centerX = containerWidth / 2;
+            centerY = containerHeight / 2;
+
+            container.innerHTML = '';
+            particles.length = 0;
+
+            if (containerWidth <= 0 || containerHeight <= 0) { 
+                console.warn("Diffusion container has zero dimensions. Cannot create particles.");
+                return; 
+            }
+
+            // --- Combine all shape points ---
+            // const allShapePoints = [...catFacePoints];
+            // whiskers.forEach(whisker => allShapePoints.push(...whisker.points));
+            const allShapePoints = [...submarinePoints, ...periscopeLine, ...windowCenters]; // Removed topFinPoints
+
+            // --- Calculate Centroid of the shape points ---
+            let sumX = 0;
+            let sumY = 0;
+            allShapePoints.forEach(p => {
+                sumX += p.x;
+                sumY += p.y;
+            });
+            const avgX = sumX / allShapePoints.length;
+            const avgY = sumY / allShapePoints.length; // Average Y of the defined shape points
+            // console.log(`Shape centroid (relative): avgX=${avgX.toFixed(3)}, avgY=${avgY.toFixed(3)}`);
+
+            // --- Calculate offset needed to center the shape vertically ---
+            const offsetY_shape = -avgY;
+            // console.log(`Applying vertical offset: ${offsetY_shape.toFixed(3)}`);
+
+            // --- Create particles ---
+            const scaleX = containerWidth / 2;
+            const scaleY = containerHeight / 2;
+
+            // Store lengths for color coding
+            const subLength = submarinePoints.length;
+            const periLength = periscopeLine.length;
+            // windowCenters length is implicitly the rest
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const pointIndex = i % allShapePoints.length;
+                const relativePoint = allShapePoints[pointIndex];
+
+                // Determine particle color based on its source point
+                let particleColor;
+                if (pointIndex < subLength) { // Submarine Body
+                    particleColor = '#FFBF00'; // Light Yellow
+                } else if (pointIndex < subLength + periLength) { // Periscope
+                    particleColor = '#FFFFE0'; // Light Yellow
+                } else { // Window Centers
+                    particleColor = '#ADD8E6'; // Light Blue
+                }
+                particle.style.backgroundColor = particleColor;
+
+                // *** Apply vertical centering offset to the relative point ***
+                const adjustedY = relativePoint.y + offsetY_shape;
+                // Keep original X (no horizontal centering applied)
+                const adjustedX = relativePoint.x;
+
+                // Add slight randomness for cloud effect
+                const randomOffsetX = (Math.random() - 0.5) * 6;
+                const randomOffsetY = (Math.random() - 0.5) * 6;
+
+                // Calculate final absolute position using adjusted Y
+                const initialX = centerX + adjustedX * scaleX + randomOffsetX;
+                const initialY = centerY - adjustedY * scaleY + randomOffsetY; // Invert Y-axis for correct orientation
+
+                // Store original initial positions for diffusion calculation relative to centered shape
+                particle.dataset.initialX = initialX;
+                particle.dataset.initialY = initialY;
+
+                // Set CSS position
+                particle.style.left = `${initialX}px`;
+                particle.style.top = `${initialY}px`;
+
+                // Set initial transform (just centering the dot itself)
+                const initialTransform = 'translate(-50%, -50%)';
+                particle.style.transform = initialTransform;
+                particle.dataset.initialTransform = initialTransform;
+
+                container.appendChild(particle);
+                particles.push(particle);
+            }
+            // console.log(`Created ${particles.length} particles using ${allShapePoints.length} shape points.`);
+        }
+
+        // --- Diffusion Animation (Using Tighter Gaussian Distribution) ---
+        function diffuse() {
+            // console.log("Diffusing (Tighter Gaussian)...");
+            if (particles.length === 0 || !container) return;
+
+             // Recalculate dimensions in case they changed slightly
+            containerWidth = container.offsetWidth;
+            containerHeight = container.offsetHeight;
+
+            if (containerWidth <= 0 || containerHeight <= 0) return; // Skip if no size
+
+            // Standard deviation for the Gaussian spread (using / 8 from context)
+            const stdDevX = containerWidth / 10;
+            const stdDevY = containerHeight / 8;
+
+            particles.forEach(particle => {
+                const initialX = parseFloat(particle.dataset.initialX);
+                const initialY = parseFloat(particle.dataset.initialY);
+
+                if (isNaN(initialX) || isNaN(initialY)) {
+                    console.warn("Invalid initial position for particle", particle);
+                    return;
+                }
+
+                const [gaussX, gaussY] = generateGaussianPair();
+
+                let targetX = initialX + gaussX * stdDevX;
+                let targetY = initialY + gaussY * stdDevY;
+
+                // Clamp targets to container bounds
+                targetX = Math.max(0, Math.min(containerWidth, targetX));
+                targetY = Math.max(0, Math.min(containerHeight, targetY));
+
+                const deltaX = targetX - initialX;
+                const deltaY = targetY - initialY;
+
+                particle.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+            });
+
+            isDiffused = true;
+            clearTimeout(animationTimeoutId);
+            animationTimeoutId = setTimeout(toggleState, diffusionTime + pauseTime);
+        }
+
+        // --- Reversal Animation (Remains the same) ---
+        function reverse() {
+            // console.log("Reversing...");
+            if (particles.length === 0) return;
+            particles.forEach(particle => {
+                particle.style.transform = particle.dataset.initialTransform;
+            });
+            isDiffused = false;
+            clearTimeout(animationTimeoutId);
+            animationTimeoutId = setTimeout(toggleState, diffusionTime + pauseTime);
+        }
+
+        // --- Toggle State ---
+        function toggleState() {
+             if (!document.hidden) { // Only run animation if the page is visible
+                if (isDiffused) {
+                    reverse();
+                } else {
+                    diffuse();
+                }
+            } else {
+                 // If page is hidden, clear timeout and check again later
+                clearTimeout(animationTimeoutId);
+                animationTimeoutId = setTimeout(toggleState, pauseTime); // Check again after a short pause
+            }
+        }
+        
+        // --- Initialization ---
+        function initializeAnimation() {
+            createParticles();
+            if (particles.length > 0) {
+                clearTimeout(animationTimeoutId);
+                 // Check visibility before starting
+                if (!document.hidden) {
+                   animationTimeoutId = setTimeout(toggleState, pauseTime * 2); // Start animation after a delay
+                } else {
+                    animationTimeoutId = setTimeout(toggleState, pauseTime * 2); // Schedule check even if hidden initially
+                }
+            }
+        }
+
+        // --- Handle window resize ---
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // console.log("Window resized - recreating particles.");
+                clearTimeout(animationTimeoutId);
+                initializeAnimation(); // Recreate particles and restart animation logic
+            }, 250); // Debounce resize events
+        });
+
+        // --- Handle Page Visibility ---
+         document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) {
+                // console.log("Page became visible, ensuring animation runs.");
+                // If animation was paused due to being hidden, restart the toggle cycle
+                 clearTimeout(animationTimeoutId); // Clear any pending check
+                 toggleState(); // Immediately try to run the next step
+            } else {
+                // console.log("Page became hidden, pausing animation timer.");
+                // No need to immediately stop CSS transitions, just stop the JS timer
+                 clearTimeout(animationTimeoutId);
+            }
+        });
+
+        // --- Initial Load ---
+        // Use DOMContentLoaded to ensure the container element exists and has dimensions
+        document.addEventListener('DOMContentLoaded', (event) => {
+             initializeAnimation();
+        });
+
+    </script>
 </body>
 </html>

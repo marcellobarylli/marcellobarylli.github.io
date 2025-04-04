@@ -1,5 +1,5 @@
 :root {
-    --background-color: #40626d;
+    --background-color: #111827; /* Very dark blue-gray */
     --title-color: #dfeef4;
     --text-color: #f1f4f5;
     --button-color: #f6f7f7;
@@ -14,6 +14,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: var(--background-color);
+    line-height: 1.25; /* Increase line spacing */
 }
 
 .container {
@@ -119,5 +120,56 @@ nav ul li a:active {
         margin: 9px auto; /* increase vertical spacing, center the buttons */
         width: 55%; /* decrease the width */
     }
+}
+
+/* --- Diffusion Animation Styles --- */
+
+.animation-section {
+    /* Revert to normal flow */
+    display: flex;
+    justify-content: center;
+    padding: 5px 0; /* Reduced top padding further */
+    /* Removed absolute positioning properties */
+}
+
+.diffusion-container {
+    position: relative; /* Keep relative for particle positioning */
+    width: 90vw;  /* Wider */
+    height: 65vh; /* Adjusted height */
+    /* Match the main page background */
+    background-color: var(--background-color);
+    /*border: 1px solid var(--text-color); /* Use text color for border */
+    overflow: hidden; /* Hide particles moving outside */
+    border-radius: 0.75rem; /* Rounded corners */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    margin: 20px auto; /* Center the container and add margin */
+}
+
+.particle {
+    position: absolute;
+    width: 5px; /* Particle size */
+    height: 5px; /* Particle size */
+    border-radius: 50%; /* Make particles circular */
+    opacity: 1; /* Make particles transparent */
+    /* Transition for smooth movement - matches JS duration */
+    transition: transform 5s ease-in-out; /* Increased duration */
+    z-index: 1; /* Ensure particles render above background */
+    /* Initial transform centers the particle dot on its top/left coordinate */
+    transform: translate(-50%, -50%);
+    user-select: none; /* Prevent user selection */
+}
+
+/* Removed media queries for diffusion-container size */
+
+/* Style for the specific link in the bio paragraph */
+.container p a {
+    color: #FFBF00; /* Submarine yellow */
+    text-decoration: none; /* Optional: remove underline */
+}
+
+/* Optional: Add a hover effect */
+.container p a:hover {
+    text-decoration: underline;
+    color: #FFE082; /* Slightly lighter yellow on hover */
 }
 

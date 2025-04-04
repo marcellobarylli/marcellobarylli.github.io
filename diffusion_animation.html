@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Diffusion Simulation (Vertically Centered)&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Custom styles */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif; /* Use Inter font */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0; /* Ensure no default body margin interferes */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f0f4f8; /* Light background for the page */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.diffusion-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative; /* Needed for absolute positioning of particles */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 300px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 300px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Dark background and adjusted border */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #1f2937; /* Tailwind slate-800 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #475569; /* Tailwind slate-600 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden; /* Hide particles moving outside */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.75rem; /* Tailwind rounded-xl */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* Tailwind shadow-md */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.particle {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 5px; /* Particle size */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 5px; /* Particle size */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Light particle color */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f1f5f9; /* Tailwind slate-100 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%; /* Make particles circular */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Transition for smooth movement */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 2.5s ease-in-out; /* Duration and easing */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Ensure particles render above others if overlapping slightly */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Initial transform centers the particle dot on its top/left coordinate */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translate(-50%, -50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* Prevent user selection */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-slate-100 flex items-center justify-center min-h-screen"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="diffusion-container" class="diffusion-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const container = document.getElementById('diffusion-container');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const particleCount = 200;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const particles = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const diffusionTime = 2500; // Milliseconds</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const pauseTime = 500; // Pause</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let isDiffused = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let animationTimeoutId = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let containerWidth = container.offsetWidth;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let containerHeight = container.offsetHeight;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let centerX = containerWidth / 2;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let centerY = containerHeight / 2;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Define Cat Shape Points (Face + Whiskers) ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const catFacePoints = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Head Outline</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ x: 0, y: -0.6 }, { x: 0.2, y: -0.58 }, { x: 0.3, y: -0.45 }, { x: 0.33, y: -0.3 },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ x: 0.33, y: -0.1 }, { x: 0.25, y: 0 }, { x: 0, y: 0.05 }, { x: -0.25, y: 0 },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ x: -0.33, y: -0.1 }, { x: -0.33, y: -0.3 }, { x: -0.3, y: -0.45 }, { x: -0.2, y: -0.58 },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ x: 0, y: -0.6 },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Ears</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ x: -0.2, y: -0.58 }, { x: -0.3, y: -0.8 }, { x: -0.05, y: -0.65 }, // Left</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ x: 0.2, y: -0.58 }, { x: 0.3, y: -0.8 }, { x: 0.05, y: -0.65 }<span class="Apple-converted-space">  </span>// Right</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const whiskers = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Whiskers points...</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ points: [ { x: 0.26, y: -0.05 }, { x: 0.405, y: -0.09 }, { x: 0.55, y: -0.1 } ] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ points: [ { x: 0.28, y: 0 },<span class="Apple-converted-space">    </span>{ x: 0.44, y: 0.01 },<span class="Apple-converted-space">  </span>{ x: 0.6, y: 0 } ] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ points: [ { x: 0.26, y: 0.05 },<span class="Apple-converted-space">  </span>{ x: 0.405, y: 0.09 }, { x: 0.55, y: 0.1 } ] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ points: [ { x: -0.26, y: -0.05 }, { x: -0.405, y: -0.09 }, { x: -0.55, y: -0.1 } ] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ points: [ { x: -0.28, y: 0 },<span class="Apple-converted-space">    </span>{ x: -0.44, y: 0.01 },<span class="Apple-converted-space">  </span>{ x: -0.6, y: 0 } ] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ points: [ { x: -0.26, y: 0.05 },<span class="Apple-converted-space">  </span>{ x: -0.405, y: 0.09 }, { x: -0.55, y: 0.1 } ] }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Helper: Generate Gaussian Random Numbers ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function generateGaussianPair() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let u1 = 0, u2 = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>while (u1 === 0) u1 = Math.random();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>u2 = Math.random();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const R = Math.sqrt(-2.0 * Math.log(u1));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const theta = 2.0 * Math.PI * u2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const z0 = R * Math.cos(theta);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const z1 = R * Math.sin(theta);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return [z0, z1];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Create Particles ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createParticles() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>containerWidth = container.offsetWidth;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>containerHeight = container.offsetHeight;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>centerX = containerWidth / 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>centerY = containerHeight / 2;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>particles.length = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (containerWidth &lt;= 0 || containerHeight &lt;= 0) { /* ... error handling ... */ return; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// --- Combine face and whisker points ---</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const allShapePoints = [...catFacePoints];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>whiskers.forEach(whisker =&gt; allShapePoints.push(...whisker.points));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// --- Calculate Centroid of the shape points ---</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let sumX = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let sumY = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>allShapePoints.forEach(p =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>sumX += p.x;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>sumY += p.y;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const avgX = sumX / allShapePoints.length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const avgY = sumY / allShapePoints.length; // Average Y of the defined shape points</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log(`Shape centroid (relative): avgX=${avgX.toFixed(3)}, avgY=${avgY.toFixed(3)}`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// --- Calculate offset needed to center the shape vertically ---</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// If avgY is negative (shape is high), offsetY_shape will be positive (shift down)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// If avgY is positive (shape is low), offsetY_shape will be negative (shift up)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const offsetY_shape = -avgY;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log(`Applying vertical offset: ${offsetY_shape.toFixed(3)}`);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// --- Create particles ---</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const scaleX = containerWidth / 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const scaleY = containerHeight / 2;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; particleCount; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const particle = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.classList.add('particle');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const pointIndex = i % allShapePoints.length;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const relativePoint = allShapePoints[pointIndex];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// *** Apply vertical centering offset to the relative point ***</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const adjustedY = relativePoint.y + offsetY_shape;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Keep original X (no horizontal centering applied)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const adjustedX = relativePoint.x;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Add slight randomness for cloud effect</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const randomOffsetX = (Math.random() - 0.5) * 6;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const randomOffsetY = (Math.random() - 0.5) * 6;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Calculate final absolute position using adjusted Y</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const initialX = centerX + adjustedX * scaleX + randomOffsetX;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const initialY = centerY + adjustedY * scaleY + randomOffsetY; // Use adjustedY</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Store original initial positions for diffusion calculation relative to centered shape</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.dataset.initialX = initialX;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.dataset.initialY = initialY;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Set CSS position</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.style.left = `${initialX}px`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.style.top = `${initialY}px`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Set initial transform (just centering the dot itself)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const initialTransform = 'translate(-50%, -50%)';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.style.transform = initialTransform;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.dataset.initialTransform = initialTransform;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(particle);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particles.push(particle);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">             </span>console.log(`Created ${particles.length} particles using ${allShapePoints.length} shape points.`);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Diffusion Animation (Using Tighter Gaussian Distribution) ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function diffuse() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log("Diffusing (Tighter Gaussian)...");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (particles.length === 0) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Standard deviation for the Gaussian spread (using / 8 from context)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const stdDevX = containerWidth / 8;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const stdDevY = containerHeight / 8;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>particles.forEach(particle =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const initialX = parseFloat(particle.dataset.initialX);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const initialY = parseFloat(particle.dataset.initialY);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (isNaN(initialX) || isNaN(initialY)) {</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>console.warn("Invalid initial position for particle", particle);</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const [gaussX, gaussY] = generateGaussianPair();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>let targetX = initialX + gaussX * stdDevX;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let targetY = initialY + gaussY * stdDevY;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Clamp targets to container bounds</p>
+<p class="p1"><span class="Apple-converted-space">                </span>targetX = Math.max(0, Math.min(containerWidth, targetX));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>targetY = Math.max(0, Math.min(containerHeight, targetY));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const deltaX = targetX - initialX;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const deltaY = targetY - initialY;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>isDiffused = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearTimeout(animationTimeoutId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animationTimeoutId = setTimeout(toggleState, diffusionTime + pauseTime);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Reversal Animation (Remains the same) ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function reverse() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log("Reversing...");</p>
+<p class="p1"><span class="Apple-converted-space">             </span>if (particles.length === 0) return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>particles.forEach(particle =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>particle.style.transform = particle.dataset.initialTransform;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isDiffused = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearTimeout(animationTimeoutId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animationTimeoutId = setTimeout(toggleState, diffusionTime + pauseTime);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Toggle State ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleState() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isDiffused) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>reverse();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>diffuse();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Initialization ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>createParticles();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (particles.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">           </span>clearTimeout(animationTimeoutId);</p>
+<p class="p1"><span class="Apple-converted-space">           </span>animationTimeoutId = setTimeout(toggleState, pauseTime * 2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Handle window resize ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let resizeTimeout;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('resize', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearTimeout(resizeTimeout);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>resizeTimeout = setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Window resized - recreating particles.");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>clearTimeout(animationTimeoutId);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>createParticles(); // Recalculates centroid and offset for new size</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (particles.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>isDiffused = false;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>animationTimeoutId = setTimeout(toggleState, pauseTime);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 250);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
