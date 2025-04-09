@@ -288,10 +288,56 @@
             }
         }
         
+        // --- Set Initial Diffused State (No Animation) ---
+        function setInitialDiffusedState() {
+            if (particles.length === 0 || !container) return;
+
+            // Recalculate dimensions just in case
+            containerWidth = container.offsetWidth;
+            containerHeight = container.offsetHeight;
+            if (containerWidth <= 0 || containerHeight <= 0) return;
+
+            const stdDevX = containerWidth / 10;
+            const stdDevY = containerHeight / 8;
+
+            particles.forEach(particle => {
+                const initialX = parseFloat(particle.dataset.initialX);
+                const initialY = parseFloat(particle.dataset.initialY);
+
+                if (isNaN(initialX) || isNaN(initialY)) return;
+
+                const [gaussX, gaussY] = generateGaussianPair();
+
+                let targetX = initialX + gaussX * stdDevX;
+                let targetY = initialY + gaussY * stdDevY;
+
+                targetX = Math.max(0, Math.min(containerWidth, targetX));
+                targetY = Math.max(0, Math.min(containerHeight, targetY));
+
+                const deltaX = targetX - initialX;
+                const deltaY = targetY - initialY;
+
+                // Apply transform directly, bypassing CSS transition for the initial setup
+                particle.style.transition = 'none'; // Temporarily disable transition
+                particle.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+            });
+
+             // Use requestAnimationFrame to ensure the styles are applied, then re-enable transitions
+            requestAnimationFrame(() => {
+                particles.forEach(particle => {
+                     // Remove the inline style to let the CSS class transition take over again
+                    particle.style.transition = ''; 
+                });
+            });
+        }
+
         // --- Initialization ---
         function initializeAnimation() {
-            createParticles();
+            createParticles(); // Creates particles at shape position
             if (particles.length > 0) {
+                setInitialDiffusedState(); // Move particles to diffused state instantly
+                isDiffused = true;         // Set the initial state flag
+
                 clearTimeout(animationTimeoutId);
                  // Check visibility before starting
                 if (!document.hidden) {
