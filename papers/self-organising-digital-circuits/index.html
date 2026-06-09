@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Organising Digital Circuits — Marcello Barylli</title>
+    <link rel="icon" href="../../portrait_white3.JPG" type="image/x-icon">
+    <link rel="stylesheet" href="../../styles.css" type="text/css">
+    <meta name="description" content="Self-Organising Digital Circuits: a topology-masked Transformer that meta-learns a decentralised local policy to self-assemble, repair, and scale Boolean logic circuits — extending Neural Cellular Automata from pattern formation to functional logic generation.">
+
+    <!-- Open Graph / social preview -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Self-Organising Digital Circuits">
+    <meta property="og:description" content="A topology-masked Transformer that meta-learns to self-assemble, repair, and scale Boolean logic circuits.">
+    <meta property="og:image" content="figures/overview_arial.png">
+    <meta property="og:url" content="https://marcellobarylli.github.io/papers/self-organising-digital-circuits/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- MathJax for equations -->
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+        svg: { fontCache: 'global' }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+    <style>
+        /* ===== Light "paper" theme (this page only; homepage stays dark) ===== */
+        :root {
+            --pg-bg: #ffffff;
+            --pg-text: #1f2328;
+            --pg-heading: #111418;
+            --pg-muted: #57606a;
+            --pg-border: #e4e7eb;
+            --pg-soft: #f6f8fa;
+            --pg-accent: #b45309;
+            --pg-accent-hover: #92400e;
+        }
+
+        /* Force the page light, overriding the site's dark base stylesheet */
+        body {
+            background-color: var(--pg-bg);
+            color: var(--pg-text);
+        }
+
+        .paper {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 24px 20px 80px;
+        }
+
+        .breadcrumb {
+            font-size: 15px;
+            margin-bottom: 28px;
+        }
+        .breadcrumb a { color: var(--pg-accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        .paper-title {
+            color: var(--pg-heading);
+            font-size: 34px;
+            line-height: 1.2;
+            text-align: center;
+            margin: 0 0 18px;
+        }
+
+        .authors {
+            color: var(--pg-text);
+            text-align: center;
+            font-size: 18px;
+            margin: 0 0 6px;
+        }
+        .authors sup { color: var(--pg-muted); font-size: 0.75em; }
+        .affiliations {
+            color: var(--pg-muted);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 auto 4px;
+        }
+        .equal-note { color: var(--pg-muted); text-align: center; font-size: 13px; margin: 6px 0 0; }
+
+        /* Action buttons */
+        .actions {
+            list-style: none;
+            padding: 0;
+            margin: 28px auto 8px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+        .actions a {
+            color: var(--pg-heading);
+            text-decoration: none;
+            padding: 9px 18px;
+            border: 1px solid #cdd3da;
+            border-radius: 4px;
+            background-color: #ffffff;
+            transition: background-color 0.1s, color 0.1s, border-color 0.1s, transform 0.1s;
+            font-size: 15px;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .actions a:hover {
+                background-color: var(--pg-accent);
+                border-color: var(--pg-accent);
+                color: #ffffff;
+                transform: scale(1.04);
+            }
+        }
+
+        hr.rule { border: none; border-top: 1px solid var(--pg-border); margin: 36px 0; }
+
+        /* Body text: override the site's centered <p> for readable article flow */
+        .paper-body { color: var(--pg-text); font-size: 17px; line-height: 1.7; }
+        .paper-body p { text-align: left; font-size: 17px; color: var(--pg-text); }
+        .paper-body h2 {
+            color: var(--pg-heading);
+            font-size: 24px;
+            margin: 44px 0 14px;
+            border-bottom: 1px solid var(--pg-border);
+            padding-bottom: 6px;
+        }
+        .paper-body h3 { color: var(--pg-heading); font-size: 19px; margin: 28px 0 8px; }
+        .paper-body a { color: var(--pg-accent); text-decoration: none; }
+        .paper-body a:hover { color: var(--pg-accent-hover); text-decoration: underline; }
+        .paper-body ul { padding-left: 22px; }
+        .paper-body li { margin-bottom: 8px; }
+        .paper-body code {
+            background: var(--pg-soft);
+            border: 1px solid var(--pg-border);
+            border-radius: 4px;
+            padding: 1px 5px;
+            font-size: 0.92em;
+        }
+
+        .abstract {
+            background-color: var(--pg-soft);
+            border: 1px solid var(--pg-border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 28px 0;
+        }
+        .abstract h2 {
+            border: none; margin: 0 0 10px; padding: 0;
+            font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pg-muted);
+        }
+        .abstract p { margin: 0; font-size: 16px; text-align: left; color: var(--pg-text); }
+
+        /* Figures: framed cards that read cleanly on the light page */
+        figure {
+            margin: 32px 0;
+            text-align: center;
+        }
+        figure img {
+            max-width: 100%;
+            height: auto;
+            background: #ffffff;
+            border: 1px solid var(--pg-border);
+            border-radius: 8px;
+            padding: 12px;
+            box-sizing: border-box;
+            box-shadow: 0 1px 4px rgba(17,20,24,0.08);
+        }
+        figcaption {
+            color: var(--pg-muted);
+            font-size: 14px;
+            line-height: 1.55;
+            text-align: left;
+            margin: 12px auto 0;
+            max-width: 760px;
+        }
+        figcaption .figlabel { color: var(--pg-heading); font-weight: bold; }
+
+        /* GIF hero */
+        .gif-hero img {
+            max-width: 100%;
+            border: 1px solid var(--pg-border);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(17,20,24,0.12);
+        }
+
+        /* Equations should not overflow on mobile */
+        mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+
+        /* Citations */
+        a.cite { color: var(--pg-accent); text-decoration: none; font-weight: 500; }
+        a.cite:hover { color: var(--pg-accent-hover); text-decoration: underline; }
+
+        .references { font-size: 14.5px; }
+        .references ol { padding-left: 26px; color: var(--pg-text); }
+        .references li { margin-bottom: 12px; line-height: 1.5; }
+        .references li::marker { color: var(--pg-muted); }
+        .references a { color: var(--pg-accent); word-break: break-word; }
+
+        @media screen and (max-width: 700px) {
+            .paper-title { font-size: 27px; }
+            .paper-body { font-size: 16px; }
+            .paper-body p { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="paper">
+
+    <div class="breadcrumb"><a href="../../">← Marcello Barylli</a></div>
+
+    <h1 class="paper-title">Self-Organising Digital Circuits</h1>
+
+    <p class="authors">
+        Marcello Barylli<sup>1,*</sup>,
+        Gabriel Béna<sup>2,*</sup>,
+        Alexander Mordvintsev<sup>3</sup>,
+        Eleni Nisioti<sup>1</sup>,
+        Sebastian Risi<sup>1</sup>
+    </p>
+    <p class="affiliations">
+        <sup>1</sup>IT University of Copenhagen &nbsp;·&nbsp;
+        <sup>2</sup>Imperial College London &nbsp;·&nbsp;
+        <sup>3</sup>Google, Paradigms of Intelligence Team
+    </p>
+    <p class="equal-note">* Denotes equal contribution.</p>
+
+    <ul class="actions">
+        <li><a href="paper.pdf">📄 PDF</a></li>
+        <li><a href="https://github.com/GabrielBena/boolean_nca_cc" target="_blank" rel="noopener noreferrer">💻 Code &amp; circuit visualisation</a></li>
+        <li><a href="#bibtex">📚 BibTeX</a></li>
+    </ul>
+
+    <!-- ===== GIF HERO =====
+         Drop your animation in this folder as figures/demo.gif (or change the src).
+         The block hides itself automatically until the file exists. -->
+    <figure class="gif-hero" id="gif-hero" style="display:none;">
+        <img id="gif-hero-img" src="figures/demo.gif" alt="Self-organising circuit animation"
+             onload="document.getElementById('gif-hero').style.display='block';">
+        <figcaption><span class="figlabel">Self-repair in action.</span> A circuit re-routing its logic around injected hardware faults under the learned local policy.</figcaption>
+    </figure>
+
+    <div class="abstract">
+        <h2>Abstract</h2>
+        <p>Fault tolerance in classical computing has traditionally relied on static strategies like hardware redundancy and error-correcting codes. Biological systems, in contrast, exhibit adaptive plasticity, maintaining function through dynamic re-organisation around damage. Inspired by this principle, we introduce Self-Organising Digital Circuits, framing functional logic generation and maintenance as a meta-learning problem on graphs. Our architecture employs a topology-masked Transformer that configures the Lookup Tables (LUT) of a circuit's Boolean gates. Extending the pattern-generation paradigm of Neural Cellular Automata (NCA), it navigates the degenerate Boolean search space to satisfy a computational task, rather than regenerating a fixed target state. We demonstrate that it can self-assemble functional circuits from scratch and rapidly re-route logic around permanent, previously unseen hardware faults. For soft errors, the policy achieves near-perfect recovery (&gt;99.99% accuracy) from damage sizes far exceeding training conditions. We further observe generalisation across circuit scales: accuracy improves on graphs substantially wider than those seen during training. This work bridges the principles of biological self-organisation with the practical domain of digital hardware.</p>
+    </div>
+
+    <hr class="rule">
+
+    <div class="paper-body">
+
+        <h2>1. Introduction</h2>
+        <p>Robustness is a central tenet of modern informatics. Modern systems are capable of impressive fault tolerance, using mechanisms such as Error Correcting Codes (ECC), modular redundancy, and sophisticated fallback protocols to ensure graceful degradation <a class="cite" href="#ref-1">[1]</a><a class="cite" href="#ref-2">[2]</a>. However, these engineered successes typically rely on <em>anticipation</em>: resources are pre-allocated and failure modes are modeled in advance. When a system encounters damage that exceeds its redundancy budget or defies its failure model, it often fails brittly.</p>
+
+        <figure>
+            <img src="figures/overview_arial.png" alt="From Self-Organising Images to Self-Organising Circuits">
+            <figcaption><span class="figlabel">Figure 1: From Self-Organising Images to Self-Organising Circuits.</span> A)&nbsp;A digital circuit of LUT-based gates can be corrupted by errors that flip LUT contents. B)&nbsp;NCAs achieve self-organising, self-repairing images via local message passing <a class="cite" href="#ref-3">[3]</a>. C)&nbsp;We extend this paradigm to circuits: each LUT maintains a hidden state and updates its logic through neighbour communication. D)&nbsp;At deployment, the trained local policy repairs damage without global supervision.</figcaption>
+        </figure>
+
+        <p>Biological intelligence offers a complementary paradigm: <em>adaptive plasticity</em>. Natural automata, such as the mammalian cortex, do not rely solely on static backups. Instead, they maintain function by dynamically re-purposing surviving components to compensate for injury, a phenomenon known as cortical remapping <a class="cite" href="#ref-4">[4]</a>. This form of resilience is not pre-programmed but emergent, enabled by the <em>degeneracy</em> of biological networks: the availability of structurally distinct yet functionally equivalent pathways <a class="cite" href="#ref-5">[5]</a>.</p>
+
+        <p>Inspired by these biological principles, and by von Neumann's early postulate that systems should "operate across errors" <a class="cite" href="#ref-6">[6]</a>, we aim to provide digital hardware with similar capabilities. As emphasised by Woods et al. <a class="cite" href="#ref-2">[2]</a>, true hardware autonomy is essential for remote deployments such as deep-space missions out of contact with Earth. This requires moving beyond simple redundancy toward organism-like self-healing, where a collective maintains function despite the loss of individual components. However, in current reconfigurable computing systems like Field-Programmable Gate Arrays (FPGAs), this error mitigation is limited by the 'reconfiguration penalty': the overhead of globally monitoring faults and remapping logic <a class="cite" href="#ref-2">[2]</a>.</p>
+
+        <p>To address this, we introduce a framework for self-organising digital circuits that replaces global, supervised reconfiguration with a decentralised local policy. We extend the Neural Cellular Automata (NCA) paradigm from pattern formation to functional logic generation. In an NCA, simple agents communicate only with their local neighbours, yet collectively produce globally coordinated behaviour. We apply this principle to a substrate of programmable logic gates, where each agent corresponds to a gate whose truth table is a differentiable parameter. When a gate fails, either due to being reversibly corrupted or permanently damaged, the circuit must be reconfigured. The goal of reconfiguration is to recover the original input-output function (Figure&nbsp;1).</p>
+
+        <p>Our architecture is meta-learned in two phases. The local update rule is trained offline via backpropagation through time, exploiting the differentiability of the continuous LUT relaxation. Once trained, it optimises circuits using only local forward passes, so the expensive global optimisation is paid once and the resulting policy can assemble and repair circuits without differentiable hardware components <a class="cite" href="#ref-7">[7]</a>.</p>
+
+        <h3>Key Contributions</h3>
+        <ul>
+            <li>We extend the NCA paradigm from pattern formation to functional logic generation, treating the cellular state as the programmable LUT of a Boolean logic gate.</li>
+            <li>We introduce the Topology-Masked Transformer (TMT) as a decentralised meta-optimiser that navigates the Boolean search space to satisfy specific computational tasks.</li>
+            <li>By relying solely on local forward passes, the TMT eliminates the need for global backpropagation or differentiable hardware during repair, making it suitable for on-chip deployment in reconfigurable hardware like FPGAs.</li>
+            <li>The policy generalises to out-of-distribution faults: for soft errors, it achieves perfect recovery at damage scales several times beyond training.</li>
+        </ul>
+
+        <h2>2. Background and Related Work</h2>
+
+        <p><strong>Evolvable Hardware.</strong> Evolvable hardware (EHW) applies evolutionary algorithms to discover or repair circuit configurations on reconfigurable substrates such as FPGAs <a class="cite" href="#ref-8">[8]</a><a class="cite" href="#ref-9">[9]</a>. EHW has demonstrated circuit evolution and online fault recovery, sharing our core objective of autonomous hardware adaptation. However, evolutionary search incurs its full computational cost for each individual circuit: chromosome lengths grow with circuit complexity, and the resulting search spaces demand substantial resources even for moderately sized designs <a class="cite" href="#ref-10">[10]</a>. Our framework addresses this by amortising the cost of optimisation across all circuits seen during training, replacing stochastic population-based search with a single deterministic forward pass at deployment time.</p>
+
+        <p><strong>From Pattern Formation to Functional Substrates.</strong> Neural Cellular Automata (NCA) parameterise local update rules with neural networks, enabling self-organising pattern formation on grids <a class="cite" href="#ref-3">[3]</a>. Recent extensions have generalised NCAs to arbitrary graph topologies <a class="cite" href="#ref-11">[11]</a> and to dynamic computational tasks <a class="cite" href="#ref-12">[12]</a>, but the automaton's state always remains the data itself. We propose a fundamental shift: viewing the cellular state as the <em>functional substrate</em> that processes data. Each cell becomes a programmable logic gate whose truth table is optimised by a learned local policy, rendering the circuit a self-organising system. Because the gates converge to discrete Boolean logic, the resulting circuits remain amenable to formal verification <a class="cite" href="#ref-13">[13]</a>. Concurrently, Miotti et al. <a class="cite" href="#ref-14">[14]</a> use differentiable logic gates to parameterise NCA update rules for hardware-native implementations; our goal is orthogonal, as we use an NCA-like model to optimise the gates themselves.</p>
+
+        <p><strong>Attention-Based Local Policies.</strong> Graph Attention Networks <a class="cite" href="#ref-15">[15]</a> introduced learnable, content-dependent message weighting on graphs. Subsequent Graph Transformer architectures augment attention with structural encodings and edge features <a class="cite" href="#ref-16">[16]</a>. Our approach is deliberately more minimal: we apply a single shared-weight Transformer block whose attention is restricted to wired neighbours via a binary topology mask, with no additional structural encoding. Applied recurrently, this topology-masked Transformer (TMT) internalises a local search policy that replaces explicit global optimisers, connecting to recent work on meta-trained in-context learners <a class="cite" href="#ref-17">[17]</a><a class="cite" href="#ref-18">[18]</a>.</p>
+
+        <h2>3. Approach</h2>
+
+        <h3>3.1 Problem Formulation</h3>
+        <p>We model a digital circuit as a Directed Acyclic Graph (DAG) of programmable Look-Up Tables (LUTs) connected by fixed wires (see Figure&nbsp;1A). The circuit receives a global binary input $\mathbf{x} \in \{0,1\}^{N_{in}}$ and produces an output $\hat{\mathbf{y}} \in \{0,1\}^{N_{out}}$. Each gate has arity $k$ and is parameterised by a LUT of $2^k$ entries that fully specify its Boolean function. Wires are integer indices selecting bits from the previous layer's outputs, allowing arbitrary connectivity and fan-out. Gates are arranged in feed-forward layers; for our 12-bit tasks with $k=4$, this yields a three-hidden-layer architecture of sizes $(96, 96, 48)$.</p>
+
+        <p>During deployment, two categories of hardware fault may corrupt a gate's LUT: <strong>(i) Recoverable (soft) errors</strong>, which flip LUT entries but can be overwritten, and <strong>(ii) Permanent (stuck-at) faults</strong>, which clamp a gate's output irreversibly. Given a target Boolean function $f$, the goal is to learn a <em>decentralised local policy</em> that configures the LUTs such that $\hat{\mathbf{y}} = f(\mathbf{x})$, and that can autonomously restore this mapping after previously unseen faults, without global supervision or backpropagation at deployment time.</p>
+
+        <p>Circuits are initialised as noisy "soft wires": each gate's LUT acts as an identity pass-through on one of its inputs (assigned round-robin), with small additive noise to break symmetry.</p>
+
+        <h3>3.2 Model: Topology-Masked Transformer (TMT)</h3>
+        <p>To apply self-organising principles, we lift the circuit into a graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ where each node $v_i$ corresponds to a gate or input pin (Figure&nbsp;1C). We then learn a local message-passing policy that discovers communication protocols to satisfy the target logic.</p>
+
+        <p><strong>Node State.</strong> Each node carries a state vector:</p>
+        $$\mathbf{s}_i = [\boldsymbol{\ell}_i, \mathbf{m}_i, \mathbf{p}_i].$$
+        <p>The LUT logits $\boldsymbol{\ell}_i \in \mathbb{R}^{2^k}$ defining the gate's logic, a latent memory $\mathbf{m}_i \in \mathbb{R}^{d_{hidden}}$ ($d_{hidden}=64$) for recurrent state, and a sinusoidal positional encoding $\mathbf{p}_i$ of the normalised depth $d_i/D$, which is invariant to circuit scale. Optionally, a scalar feedback signal $r_i$ (described below) is appended, yielding $\mathbf{s}_i = [\boldsymbol{\ell}_i, \mathbf{m}_i, \mathbf{p}_i, r_i]$.</p>
+
+        <p><strong>Connectivity.</strong> The graph topology mirrors the circuit wiring. In the random-topology regime, connections are generated by randomly permuting previous-layer output indices, ensuring uniform fan-out while preserving the DAG structure. We enforce bidirectional edges: every forward wire $A \rightarrow B$ implies a backward message-passing edge $B \rightarrow A$.</p>
+
+        <p><strong>Update Rule.</strong> We parameterise the update rule as a single-block Transformer operating on the $N$ gate tokens simultaneously. We write $\hat{\mathbf{M}}$ for a layer-normalised <a class="cite" href="#ref-19">[19]</a> matrix $\mathbf{M}$. The node states $\mathbf{S}$ are projected into a latent space ($d_{attn}=128$):</p>
+        $$\mathbf{Z}^{(0)} = \hat{\mathbf{S}}\, W_{in}^T \in \mathbb{R}^{N \times d_{attn}}$$
+
+        <p>A single attention block, whose attention is restricted to wired neighbours via a binary topology mask $M \in \{0,1\}^{N \times N}$, refines the latents. We adopt Pre-LN normalisation <a class="cite" href="#ref-20">[20]</a> with separate LayerNorms for queries and keys/values, and QK-normalisation <a class="cite" href="#ref-21">[21]</a> to stabilise attention logits across recurrent steps. Residual branches are gated via ReZero <a class="cite" href="#ref-22">[22]</a>: learned scalars $\alpha$ initialised at zero so that the block initially acts as an identity:</p>
+        $$\mathbf{Z}' = \mathbf{Z}^{(0)} + \alpha_{\text{attn}} \cdot \text{MSA}\!\left(\hat{\mathbf{Z}}^{(0)},\; \hat{\mathbf{Z}}^{(0)},\; M\right)$$
+        $$\mathbf{Z}_{out} = \mathbf{Z}' + \alpha_{\text{ffn}} \cdot \text{MLP}\!\left(\hat{\mathbf{Z}}'\right)$$
+
+        <p>The two-layer MLP (with GeLU activation) acts independently per node; all cross-node communication is confined to the masked attention step. Output latents are decoded into residual parameter updates via $\alpha$-gated linear heads:</p>
+        $$\Delta \boldsymbol{\ell}_i = \alpha_{\ell} \cdot \hat{\mathbf{Z}}_{out,i}\, W_{\ell}^T, \qquad \Delta \mathbf{m}_i = \alpha_{m} \cdot \hat{\mathbf{Z}}_{out,i}\, W_{m}^T$$
+
+        <p>Positional encodings $\mathbf{p}_i$ remain static; the error feedback $r_i$ is dynamically recomputed at every step. The updates are applied residually ($\mathbf{s}_i^{(t+1)} = \mathbf{s}_i^{(t)} + \Delta\mathbf{s}_i^{(t)}$) by applying this single shared-weight block recurrently for $T$ steps, forming a $T$-layer weight-tied residual network whose expressivity comes through iterated refinement. The topology mask imposes a strict "speed of light": information propagates at most one hop per step, so global coordination emerges from iterated local interactions, faithful to the NCA paradigm.</p>
+
+        <figure>
+            <img src="figures/fixed_wiring_nca_hard_accuracy_both_final.png" alt="TMT Performance on Fixed Topologies">
+            <figcaption><span class="figlabel">Figure 2: TMT Performance on Fixed Topologies.</span> <strong>Box plots</strong> represent the test-set accuracy distribution of circuits grown by the NCA policy after 256 steps. The <strong>faint background bars</strong> represent the baseline performance of standard Global Backpropagation (BP) on the same task and regime. The <strong>blue</strong> elements (Damages OFF during Eval) show performance in ideal conditions. The <strong>green</strong> elements (Damages ON during Eval) show performance when subjected to stochastic failures. We compare two training regimes: the <strong>top row</strong> displays a policy that has never faced damage during training; thus, the green elements represent an out-of-distribution evaluation. The <strong>bottom row</strong> displays a policy trained with active damages, demonstrating adaptive robustness.</figcaption>
+        </figure>
+
+        <p><strong>Per-Node Error Feedback.</strong> For fixed-wiring experiments the architecture above suffices; for random wirings, we found explicit error signals essential. Each output gate receives a scalar $r_i$: the mean absolute residual over a task batch:</p>
+        $$r_i = \frac{1}{|\mathcal{D}|}\sum_{(\mathbf{x}, \mathbf{y}) \in \mathcal{D}} |y_i - \hat{y}_i(\mathbf{x})|$$
+        <p>Non-output gates receive $r_i = 0$. This signal propagates upstream through recurrent attention, enabling interior gates to adjust in response to downstream error, forming a decentralised credit assignment.</p>
+
+        <p><strong>Scale-Free Architecture.</strong> Because the Transformer operates at the node level with shared weights, its parameters are independent of circuit size: the same update rule applies to 20 or 200 gates, 3 or 10 layers. Only the topology mask $M$ must be recomputed from the wiring. Combined with normalised positional encodings, this endows the architecture with <em>scale-freedom</em>: a trained policy can, in principle, be deployed on circuits of different size without retraining.</p>
+
+        <h3>3.3 Training</h3>
+        <p><strong>Differentiable Circuit Execution.</strong> To train the update rule via backpropagation, we require gradients through the circuit's Boolean logic. Following the differentiable logic gate network (DLGN) paradigm <a class="cite" href="#ref-23">[23]</a>, we achieve this through a continuous relaxation: binary signals are represented as probabilities $x \in [0,1]$, and each gate's $2^k$ LUT logits are passed through a sigmoid. Unlike the categorical relaxation of DLGNs, which learns a softmax distribution over the 16 fixed two-input Boolean functions, our formulation directly parameterises the continuous LUT entries. The soft gate output is then computed as a multilinear interpolation of the LUT at the input point $\mathbf{x}$: each input probability recursively selects between halves of the table, mixing the two branches proportionally. For a 2-input gate with inputs $(x_1, x_2)$, this reduces to bilinear interpolation over the four LUT entries. This interpolation is fully differentiable, and since each LUT entry influences multiple input combinations, gradients flow through the entire function. At inference, rounding to $\{0,1\}$ recovers discrete Boolean logic.</p>
+
+        <p><strong>Pool-Based Meta-Learning.</strong> We frame the circuit optimisation problem as a dynamic system trained via Backpropagation Through Time (BPTT). This is meta-learning in the sense of Andrychowicz et al. <a class="cite" href="#ref-24">[24]</a>: the TMT is trained to produce parameters for a <em>separate</em> computation (the circuit), with the outer objective being that computation's task loss, a two-level structure absent in standard NCAs, where the cell state <em>is</em> the target output.</p>
+
+        <p>As a baseline, we compare against standard Backpropagation (BP) applied directly to the differentiable LUTs, which serves as an upper bound on circuit performance. Following <a class="cite" href="#ref-3">[3]</a>, we maintain a persistent graph Pool $\mathcal{P} = \{ \mathcal{G}_1, \dots, \mathcal{G}_K \}$. Circuits are periodically reset to unoptimised states (average lifespan of 128 steps) to enforce a dual curriculum: constant injection of fresh circuits demands rapid self-assembly, while surviving circuits enforce long-term homeostasis under damage injections.</p>
+
+        <p><strong>Inner Loop (Inference):</strong> At each training step, a batch of circuits and Boolean input–output pairs $(\mathbf{X}_{train}, \mathbf{Y}_{train})$ are sampled. The TMT is applied iteratively for $T$ steps via a differentiable <code>scan</code>. Crucially, the circuit is functionally executed at every tick $t$: updated LUT logits are extracted, the circuit processes the input data, and resulting per-node residuals $r_i$ are written back into the graph state. This creates a closed real-time feedback loop. To balance recurrent expressivity with the computational constraints of scaling batch size and model capacity, we truncate the BPTT horizon to $T=5$.</p>
+
+        <p><strong>Outer Loop (Optimisation):</strong> Following the $T$-step scan, the circuit loss $\mathcal{L}$ (Binary Cross Entropy) is computed against $\mathbf{Y}_{train}$. We support both fixed evaluation at the final step ($t^{*} = T$) and stochastic evaluation ($t^{*} \sim \mathcal{U}(T_{\min}, T)$) to capture varying gradient depths and enable curriculum scheduling. Gradients of $\mathcal{L}$ with respect to the TMT parameters are computed via BPTT through both the recurrent message-passing and the functional circuit execution, followed by an Adam <a class="cite" href="#ref-25">[25]</a> update.</p>
+
+        <h2>4. Experiments and Results</h2>
+        <p><strong>Boolean Tasks.</strong> We evaluate on three 12-bit tasks (4,096 input–output pairs; 256 held out for testing). <strong>Split Multiplication:</strong> two 6-bit integers are multiplied, occupying the full 12-bit output. <strong>Split Addition:</strong> two 6-bit integers are added (7-bit result, 5 bits zero-padded). <strong>Bit Reversal:</strong> the input array is reversed, mapping bit $i$ to position $11-i$.</p>
+
+        <h3>4.1 Regime I: Growth, Persistence, and Repair on Fixed Topologies</h3>
+        <p>We first establish that the local TMT policy can grow functional circuits from unoptimised "soft wires" and maintain them indefinitely. To ensure the policy learns the underlying generative function rather than memorising training patterns, all reported accuracies are computed strictly on a <strong>held-out test split</strong> of 256 unseen inputs.</p>
+
+        <figure>
+            <img src="figures/NCA_resilience_results_final_notitle.png" alt="TMT Resilience to Damage">
+            <figcaption><span class="figlabel">Figure 3: Resilience to Damage.</span> Evolution of Loss (left) and Accuracy (right) under permanent damage. The <strong>solid green</strong> line represents the TMT-maintained circuit. The <strong>solid blue</strong> line represents standard Backpropagation (Upper Bound). The <strong>dashed</strong> line represents the No-Repair baseline (Lower Bound).</figcaption>
+        </figure>
+
+        <p>As shown in Figure&nbsp;2 (Top Row, Blue), the TMT policy converges across all tasks without damage, achieving performance virtually identical to the global Backpropagation (BP) baseline. It achieves perfect accuracy on Bit Reversal and mean accuracies of 0.96 and 0.84 on Split Addition and Multiplication, respectively.</p>
+
+        <p>To evaluate fault tolerance, we introduce stochastic damage (clamping 20% of gates to zero). When exposed to damage out-of-distribution (Zero-Shot Resilience, Figure&nbsp;2 Top Row, Green), the TMT retains partial functionality, indicating inherent robustness in the distributed representation. When trained with active damage (Learned Resilience, Bottom Row), performance under damage approaches the BP baseline, demonstrating adaptive robustness, albeit with a slight degradation in the damage-free ceiling due to the noisy training environment.</p>
+
+        <p>Targeted catastrophic events introduce simultaneous destruction of 10% of its gates, termed "shotgun" in Figure&nbsp;3. The TMT actively recovers and stabilises at $\approx 0.97$ accuracy, vastly outperforming a passive (no-repair) baseline. While global BP (upper bound) recovers more fully, the TMT's decentralised repair minimises the initial impact drop.</p>
+
+        <p>Principal Component Analysis (PCA) of the optimisation trajectories (Figure&nbsp;4) reveals the mechanism of this resilience: under recoverable damage, the TMT does not rewind to a memorised canonical state. Instead, it dynamically re-routes, fanning out into functionally equivalent but structurally distinct local minima.</p>
+
+        <figure>
+            <img src="figures/Horizontal_PCA.png" alt="PCA Trajectories of Circuit Optimisation">
+            <figcaption><span class="figlabel">Figure 4: PCA Trajectories of Circuit Optimisation.</span> <strong>(Left)</strong> Without damage, optimisation is deterministic. <strong>(Middle/Right)</strong> Under recoverable or permanent damage, trajectories diverge, driving circuits into a diverse fan of alternative configurations rather than rewinding.</figcaption>
+        </figure>
+
+        <h3>4.2 Regime II: Self-Healing Circuits and the Degenerate Solution Space</h3>
+        <p>To focus on practical considerations, we remove the need to discover functioning circuits and test the TMT purely as a maintenance mechanism on circuits preconfigured to perfect accuracy by BP.</p>
+
+        <p>We restrict ourselves to reversible perturbations, modelling the radiation-induced soft errors that dominate over hard faults in aerospace-grade SRAM-based FPGAs <a class="cite" href="#ref-26">[26]</a>. Figure&nbsp;5(A–B) compares TMT and BP performance upon damage recovery to convergence (26 message steps and 300 gradient steps, respectively). For TMT, it demonstrates perfect out-of-distribution recovery for "shotgun" damage sizes far exceeding training parameters. This generalisation highlights the model's relevance for radiation-induced error scenarios. Hamming distances reveal a "signature edit" fraction independent of perturbation size.</p>
+
+        <figure>
+            <img src="figures/combined_damage_stepwise.png" alt="Soft-Error Recovery">
+            <figcaption><span class="figlabel">Figure 5: Soft-Error Recovery.</span> <strong>(A–B)</strong> Out-of-distribution generalisation in damage size: TMT and BP are trained on 40-gate damage only and evaluated on larger / smaller perturbations, 100 patterns per damage size. <strong>(A)</strong> Hard test-set accuracy of recovered circuits. <strong>(B)</strong> Mean per-gate Hamming distance between pre- and post-recovery LUTs, quantifying the edit size of each method. <strong>(C)</strong> TMT-based recovery trajectory from successive 40-gate damage events, with standard deviation across 256 damage patterns (hard test-set, within distribution) indicated in the shaded region.</figcaption>
+        </figure>
+
+        <p>To further stress-test the system, we introduce successive "shotgun" failures of 40 gates at once (17%). Figure&nbsp;5C demonstrates recovery on the addition task following multiple damage events. BP is omitted because message-passing and gradient steps are not directly comparable per-step; a compute-matched comparison is outside the scope of this work.</p>
+
+        <p><strong>Solution Degeneracy.</strong> To map the degenerate solution space of these self-healing circuits (Figure&nbsp;6), we employ a recursive Depth-First Search (DFS) exploration strategy. Starting from a preconfigured circuit with perfect accuracy on the binary addition task (8 inputs/outputs, yielding a 2560-dimensional LUT vector), we apply a 40-gate recoverable perturbation. Because the damage is not permanent, the exact pre-damage state is theoretically recoverable. However, the system consistently finds alternate, functionally equivalent solutions (perfect accuracy).</p>
+
+        <figure>
+            <img src="figures/UMAP_2Panel_Horizontal.png" alt="UMAP of Circuit Solution Space">
+            <figcaption><span class="figlabel">Figure 6: UMAP of Circuit Solution Space.</span> 2D embedding of 50,000 functional configurations recovered by the TMT policy (Top) and BP (Bottom) computing binary addition. The red star indicates the root circuit, grey edges indicate perturbation–recovery cycles. The TMT policy discovers discrete structural archetypes while BP showcases a single cluster.</figcaption>
+        </figure>
+
+        <p>By treating each recovered circuit as a new seed for subsequent perturbations, we generate a recursive tree of trajectories (search depth of 10, branching factor of 4). We apply this procedure identically to the TMT policy and a standard BP baseline, visualising the resulting 2560-dimensional configuration space via UMAP (Euclidean distance, $n_{\text{neighbors}}=15$, $\text{min\_dist}=0.1$), where Euclidean distance preserves the neighbourhood ranking of Hamming distance for binary vectors.</p>
+
+        <p>The TMT policy organises recovered solutions into discrete functional archetypes. The sparse connectivity between these clusters suggests a <em>neutral landscape</em>: multiple successive perturbations force the system to traverse fitness valleys, landing in entirely different structural arrangements that maintain identical global functionality. This reveals an ergodic, degenerate solution space.</p>
+
+        <p>We compare this with recovery via direct BP on the circuits. This produces a single cluster centered on the root configuration, exploring more incremental deformations rather than traversing between distinct structural basins.</p>
+
+        <h3>4.3 Regime III: Generalisation to Random Topologies</h3>
+        <p>The most challenging setting removes the architectural constraints entirely. We transition to a Random Topology regime, where every circuit in the pool possesses a unique, randomly generated wiring diagram. Consequently, the meta-learner cannot overfit to "Gate A connected to Gate B." Instead, it must learn a truly topological, wiring-agnostic policy.</p>
+
+        <figure>
+            <img src="figures/random_wiring_nca_hard_accuracy_final.png" alt="TMT Performance on Random Topologies">
+            <figcaption><span class="figlabel">Figure 7: TMT Performance on Random Topologies.</span> The <strong>bars</strong> represent the test-set accuracy distribution of circuits grown by the TMT policy after 256 steps. The <strong>blue</strong> elements (Damages OFF) show performance in ideal conditions. The <strong>green</strong> elements (Damages ON) show the performance of the <em>robust</em> policy when subjected to stochastic failures. BP performance is, by construction, wiring agnostic, and is not reported here (the accuracies of BP on each task are shown in Figure&nbsp;2).</figcaption>
+        </figure>
+
+        <p>We find this learning regime to be significantly harder than Fixed Topology training. We successfully learned a high-performing, topology-agnostic policy for the <strong>Bit Reversal</strong> task, achieving good generalisation to unseen random graphs. However, for the arithmetic tasks (Addition and Multiplication), the policy struggles to fully converge. While it learns to approximate the output distribution, capturing coarse statistical patterns of the target function, it lacks the precision required for exact arithmetic operations.</p>
+
+        <p>In this specific regime, standard BP (which is inherently topology-agnostic via re-training) still holds the advantage. However, the success on the Bit Reversal task provides a proof-of-principle that the TMT <em>can</em> learn generalisable routing algorithms. We display random-wiring training results in Figure&nbsp;7.</p>
+
+        <h3>4.4 Regime IV: Scale-Free Optimisation</h3>
+        <p>Finally, we leverage the decentralised nature of our architecture to explore its scaling capabilities. Theoretically, because the TMT shares weights across all nodes and operates on local neighbourhoods, the learned update rule should be independent of the circuit size. We investigate this "Scale-Free" hypothesis by deploying a trained TMT policy on circuits significantly larger (or smaller) than those seen during training.</p>
+
+        <figure>
+            <img src="figures/scale_free_performance_fixed_final_notitle.png" alt="Scale-free generalisation, trained on fixed wires">
+            <img src="figures/scale_free_performance_random_final_notitle.png" alt="Scale-free generalisation, trained on random wires">
+            <figcaption><span class="figlabel">Figure 8: Scale-Free Generalisation.</span> Test accuracy as a function of circuit width (number of nodes). The vertical dashed line indicates the circuit size used during training ($N=264$). <strong>(a, top)</strong> When trained on a single fixed topology, the policy overfits the size: performance peaks at the training size and collapses elsewhere. <strong>(b, bottom)</strong> When trained on random topologies, the policy becomes truly scale-free: performance actually <em>improves</em> as the circuit gets wider, leveraging the extra capacity despite never seeing such large graphs during training.</figcaption>
+        </figure>
+
+        <p>The results reveal that scale-freedom is not just an architectural feature, but rather a <em>learned capability</em>.</p>
+
+        <p><strong>Overfitting Size (Fixed Training):</strong> When the TMT is trained on a fixed topology (Figure&nbsp;8a), it overfits the specific scale of the training graph. Performance peaks exactly at the training size ($N=264$, vertical dashed line) and collapses for larger or smaller circuits.</p>
+
+        <p><strong>Emergent Scalability (Random Training):</strong> In contrast, when trained on the curriculum of random topologies (Figure&nbsp;8b), the policy generalises remarkably. Not only does it maintain function on larger circuits, but accuracy actually <em>increases</em> as we expand the width of the circuit (from 264 to 450+ nodes). The local policy is able to utilise the additional latent capacity of the wider layers to route signals more effectively, despite never having encountered graphs of this size during training.</p>
+
+        <p>We note that this scaling success is currently limited to circuit <em>width</em>. Scaling <em>depth</em> remains a challenge, likely because our positional encoding (normalised depth fraction) changes resolution as layers are added, disrupting the policy's depth perception. Nevertheless, the ability to train on more small, cheap circuits and successfully deploy on wider architectures is a potent validation of the TMT's "growth" paradigm.</p>
+
+        <h2>5. Discussion</h2>
+        <p>We have presented a framework that extends the NCA paradigm from grid-based pattern formation to functional logic generation on arbitrary graphs. By replacing global backpropagation with a decentralised, topology-masked Transformer, we demonstrated that digital circuits can autonomously self-assemble, self-repair, and generalise their routing policies across varying structural scales. For soft errors, the learned policy recovers perfectly even at damage scales several times beyond training, indicating a general repair strategy rather than memorisation of specific failure patterns.</p>
+
+        <p>Under such reversible damage, where the system could theoretically return to its exact prior state, the policy drives the circuit toward new, functionally equivalent local minima. This indicates that the meta-learner prioritises functional homeostasis over fixed structural targets.</p>
+
+        <p>This use of degenerate solutions mirrors biological multiscale competency <a class="cite" href="#ref-27">[27]</a>, where evolved systems maintain robust homeostasis under noisy, uncertain conditions by dynamically switching between structurally distinct but functionally equivalent pathways (e.g. aerobic vs. anaerobic metabolic pathways <a class="cite" href="#ref-5">[5]</a>).</p>
+
+        <p>While current industrial FPGA applications typically require deterministic logic configurations, the capacity of the TMT to harness structural degeneracy, showcasing strong generalisation behaviour, holds promise for autonomous systems facing unpredictable hardware failures in remote environments.</p>
+
+        <h3>5.1 Limitations and Future Directions</h3>
+        <p>Despite these capabilities, several limitations present immediate avenues for future work. First, our current positional encoding captures only vertical depth within the circuit DAG, stripping the policy of local topological context. Incorporating Random Walk Structural Encodings (RWSE) <a class="cite" href="#ref-28">[28]</a>, Laplacian eigenvectors <a class="cite" href="#ref-29">[29]</a>, or functional metrics like fan-out centrality would provide the meta-learner with richer structural maps while preserving the architecture's scale-freedom.</p>
+
+        <p>Second, the per-node error feedback $r_i$ is a coarse scalar residual. The meta-learner remains blind to the actual task data; augmenting the architecture with cross-attention to input-output pairs, akin to Perceiver IO <a class="cite" href="#ref-30">[30]</a>, could enable genuine, data-informed in-context reasoning.</p>
+
+        <p>Finally, while the circuit's physical connectivity is inherently sparse ($&lt;3\%$ density), the topology mask currently operates as a dense $N \times N$ matrix. Implementing native sparse attention is computationally critical to scale this framework to circuits containing thousands of gates.</p>
+
+        <h3>5.2 Toward Self-Organising Computational Substrates</h3>
+        <p>The true significance of this work lies beyond the Boolean domain on which we have validated it. What distinguishes it from prior self-organising models is that the decentralised policy operates on a substrate that itself computes. The topology mask defines the physical wiring, while the learned attention policy governs the functional interactions between connected nodes. These two levels, structural connectivity and dynamic coupling, are independently addressable: one can remain fixed while the other adapts, or both can evolve on separate timescales. This dissociation is absent in conventional neural networks, where structure and function are collapsed into a single weight matrix.</p>
+
+        <p>The separation naturally suggests a richer architecture in which the same shared-weight mechanism first grows a sparse structural scaffold, then governs the functional dynamics within it, with no hard boundary between the two phases. Realising this structural half, endowing the TMT with the ability to add, prune, and rewire, remains the central open challenge.</p>
+
+        <p>By embracing adaptive plasticity over prescriptive redundancy, this work forms the basis for computational substrates that grow, learn, and heal themselves.</p>
+
+        <h2>Acknowledgements</h2>
+        <p>We thank Nicolas Bessone, Ismail Ceylan, Matthias Dellago, Benedikt Hartl, Kathrin Korte, Milton Montero, Elias Najarro, Joachim W. Pedersen, Fernando Rosas, and Florian Scheidl for fruitful and inspiring discussions.</p>
+        <p>Funded by the European Union (ERC, GROW-AI, 101045094). Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union or the European Research Council. Neither the European Union nor the granting authority can be held responsible for them.</p>
+
+        <h2 id="references">References</h2>
+        <div class="references">
+        <ol>
+            <li id="ref-1">J. von Neumann. Probabilistic Logics and the Synthesis of Reliable Organisms From Unreliable Components. <em>Automata Studies (AM-34)</em>, 1956. <a href="https://www.degruyter.com/document/doi/10.1515/9781400882618-003/html" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-2">R. Woods, G. Lightbody. Robustness in Digital Hardware. <em>Robust Intelligent Systems</em>, Springer-Verlag London, 2008.</li>
+            <li id="ref-3">A. Mordvintsev, E. Randazzo, E. Niklasson, M. Levin. Growing Neural Cellular Automata. <em>Distill</em>, 2020. <a href="https://distill.pub/2020/growing-ca" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-4">R. J. Nudo. Recovery after brain injury: mechanisms and principles. <em>Frontiers in Human Neuroscience</em>, 2013.</li>
+            <li id="ref-5">G. M. Edelman, J. A. Gally. Degeneracy and complexity in biological systems. <em>PNAS</em>, 2001. <a href="https://www.pnas.org/doi/10.1073/pnas.231499798" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-6">J. von Neumann. Theory of Self-Reproducing Automata. <em>University of Illinois Press</em>, 1966.</li>
+            <li id="ref-7">S. Sunada, T. Niiyama, K. Kanno, R. Nogami, A. Röhm, T. Awano, et al. Blending Optimal Control and Biologically Plausible Learning for Noise-Robust Physical Neural Networks. <em>Physical Review Letters</em>, 2025. <a href="https://link.aps.org/doi/10.1103/PhysRevLett.134.017301" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-8">A. Thompson. An evolved circuit, intrinsic in silicon, entwined with physics. <em>Evolvable Systems: From Biology to Hardware</em>, 1997.</li>
+            <li id="ref-9">D. Whitley, J. Yoder, N. Carpenter. Resurrecting FPGA Intrinsic Analog Evolvable Hardware. <em>MIT Press</em>, 2021. <a href="https://dx.doi.org/10.1162/isal_a_00448" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-10">P. C. Haddow, A. M. Tyrrell. Challenges of evolvable hardware: past, present and the path to a promising future. <em>Genetic Programming and Evolvable Machines</em>, 2011. <a href="https://doi.org/10.1007/s10710-011-9141-6" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-11">D. Grattarola, L. Livi, C. Alippi. Learning Graph Cellular Automata. <em>arXiv</em>, 2021. <a href="http://arxiv.org/abs/2110.14237" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-12">G. Béna, M. Faldor, D. F. M. Goodman, A. Cully. A Path to Universal Neural Cellular Automata. <em>arXiv</em>, 2025. <a href="http://arxiv.org/abs/2505.13058" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-13">F. Kresse, E. Yu, C. H. Lampert, T. A. Henzinger. Logic Gate Neural Networks are Good for Verification. <em>arXiv</em>, 2025. <a href="http://arxiv.org/abs/2505.19932" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-14">P. Miotti, E. Niklasson, E. Randazzo, A. Mordvintsev. Differentiable Logic Cellular Automata: From Game of Life to Pattern Generation. <em>arXiv</em>, 2025. <a href="http://arxiv.org/abs/2506.04912" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-15">P. Veličković, G. Cucurull, A. Casanova, A. Romero, P. Liò, Y. Bengio. Graph Attention Networks. <em>arXiv</em>, 2018. <a href="http://arxiv.org/abs/1710.10903" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-16">V. P. Dwivedi, X. Bresson. A Generalization of Transformer Networks to Graphs. <em>arXiv</em>, 2021. <a href="http://arxiv.org/abs/2012.09699" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-17">L. Kirsch, J. Schmidhuber. Meta-Learning Backpropagation and Improving It. <em>arXiv</em>, 2022. <a href="http://arxiv.org/abs/2012.14905" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-18">L. Kirsch, J. Harrison, J. Sohl-Dickstein, L. Metz. General-Purpose In-Context Learning by Meta-Learning Transformers. <em>arXiv</em>, 2024. <a href="http://arxiv.org/abs/2212.04458" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-19">J. L. Ba, J. R. Kiros, G. E. Hinton. Layer Normalization. <em>arXiv</em>, 2016. <a href="http://arxiv.org/abs/1607.06450" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-20">R. Xiong, Y. Yang, D. He, K. Zheng, S. Zheng, C. Xing, et al. On Layer Normalization in the Transformer Architecture. <em>arXiv</em>, 2020. <a href="http://arxiv.org/abs/2002.04745" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-21">M. Dehghani, J. Djolonga, B. Mustafa, P. Padlewski, J. Heek, J. Gilmer, et al. Scaling Vision Transformers to 22 Billion Parameters. <em>arXiv</em>, 2023. <a href="http://arxiv.org/abs/2302.05442" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-22">T. Bachlechner, B. P. Majumder, H. H. Mao, G. W. Cottrell, J. McAuley. ReZero is All You Need: Fast Convergence at Large Depth. <em>arXiv</em>, 2020. <a href="http://arxiv.org/abs/2003.04887" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-23">F. Petersen, C. Borgelt, H. Kuehne, O. Deussen. Deep Differentiable Logic Gate Networks. <em>arXiv</em>, 2022. <a href="http://arxiv.org/abs/2210.08277" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-24">M. Andrychowicz, M. Denil, S. Gomez, M. W. Hoffman, D. Pfau, T. Schaul, et al. Learning to learn by gradient descent by gradient descent. <em>arXiv</em>, 2016. <a href="http://arxiv.org/abs/1606.04474" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-25">D. P. Kingma, J. Ba. Adam: A Method for Stochastic Optimization. <em>arXiv</em>, 2017. <a href="http://arxiv.org/abs/1412.6980" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-26">W. Wang, X. Li, L. Chen, H. Sun, F. Zhang. A Review on Soft Error Correcting Techniques of Aerospace-Grade Static RAM-Based Field-Programmable Gate Arrays. <em>Sensors</em>, 2024. <a href="https://www.mdpi.com/1424-8220/24/16/5356" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-27">G. Pezzulo, M. Levin. Top-down models in biology: explanation and control of complex living systems above the molecular level. <em>Journal of The Royal Society Interface</em>, 2016. <a href="https://doi.org/10.1098/rsif.2016.0555" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-28">L. Rampášek, M. Galkin, V. P. Dwivedi, A. T. Luu, G. Wolf, D. Beaini. Recipe for a General, Powerful, Scalable Graph Transformer. <em>arXiv</em>, 2023. <a href="http://arxiv.org/abs/2205.12454" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-29">D. I. Shuman, S. K. Narang, P. Frossard, A. Ortega, P. Vandergheynst. The Emerging Field of Signal Processing on Graphs. <em>IEEE Signal Processing Magazine</em>, 2013. <a href="http://arxiv.org/abs/1211.0053" target="_blank" rel="noopener noreferrer">link</a></li>
+            <li id="ref-30">A. Jaegle, F. Gimeno, A. Brock, A. Zisserman, O. Vinyals, J. Carreira. Perceiver: General Perception with Iterative Attention. <em>arXiv</em>, 2021. <a href="http://arxiv.org/abs/2103.03206" target="_blank" rel="noopener noreferrer">link</a></li>
+        </ol>
+        </div>
+
+        <h2 id="bibtex">BibTeX</h2>
+        <pre style="background:#f6f8fa; border:1px solid #e4e7eb; border-radius:8px; padding:16px 18px; overflow-x:auto; color:#1f2328; font-size:13.5px; line-height:1.5;">@misc{barylli2026sodc,
+  title  = {Self-Organising Digital Circuits},
+  author = {Barylli, Marcello and B\'{e}na, Gabriel and Mordvintsev, Alexander
+            and Nisioti, Eleni and Risi, Sebastian},
+  year   = {2026},
+  url    = {https://marcellobarylli.github.io/papers/self-organising-digital-circuits/}
+}</pre>
+
+    </div>
+
+    <hr class="rule">
+    <div class="breadcrumb"><a href="../../">← Back to home</a></div>
+
+</div>
+</body>
+</html>
