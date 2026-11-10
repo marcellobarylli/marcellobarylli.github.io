@@ -173,3 +173,104 @@ nav ul li a:active {
     color: #FFE082; /* Slightly lighter yellow on hover */
 }
 
+
+/* --- Tabs --- */
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    border-bottom: 1px solid rgb(246 247 247 / 0.25);
+}
+
+.tab {
+    font: inherit;
+    font-size: 17px;
+    color: var(--text-color);
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 10px 16px;
+    margin-bottom: -1px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.tab:hover { opacity: 1; }
+
+.tab[aria-selected="true"] {
+    opacity: 1;
+    border-bottom-color: #FFBF00; /* Submarine yellow */
+}
+
+.tab:focus-visible {
+    outline: 2px solid #FFBF00;
+    outline-offset: 2px;
+}
+
+header .container { padding-bottom: 0; }
+
+.tab-panel[hidden] { display: none; }
+
+/* --- Portfolio --- */
+.portfolio { max-width: 900px; }
+
+.project {
+    border: 1px solid rgb(246 247 247 / 0.2);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background-color: rgb(255 255 255 / 0.03);
+    margin: 10px 0 40px;
+}
+
+.project-shot { display: block; }
+
+.project-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.project-body { padding: 4px 24px 20px; }
+
+.project h2 {
+    color: var(--title-color);
+    margin: 18px 0 6px;
+}
+
+.project p {
+    text-align: left;
+    font-size: 17px;
+    line-height: 1.45;
+    margin: 10px 0;
+}
+
+.project .project-lede { color: var(--title-color); }
+
+.project-links {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.project-links a {
+    color: var(--button-text-color);
+    text-decoration: none;
+    border: 1px solid var(--button-color);
+    border-radius: 2px;
+    padding: 8px 14px;
+    display: inline-block;
+}
+
+.project-links a:hover {
+    background-color: var(--button-hover-color);
+    color: var(--button-hover-text-color);
+}
+
+@media screen and (max-width: 700px) {
+    .tabs { justify-content: center; }
+    .project-body { padding: 4px 16px 16px; }
+    .project p { font-size: 17px; }
+}

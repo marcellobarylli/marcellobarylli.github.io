@@ -18,6 +18,8 @@ Here's a quick rundown of the main files in this repository:
 
 6. `googlec2995e9a70e56991.html` - This is a Google verification file.
 
+7. `portfolio/` - Screenshots for the Portfolio tab.
+
 ## Let's Connect
 
 If you have any questions, or if you're interested in collaborating on computational biology research projects, especially in the realm of graph neural networks or multi-agent systems, don't hesitate to reach out! You can find all my contact information on the website.

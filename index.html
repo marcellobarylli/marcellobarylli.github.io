@@ -32,6 +32,15 @@
                 <img class="profile" src="portrait_white2.JPG" alt="Profile picture of Marcello Barylli">
                 <h1>Marcello Barylli</h1>
             </div>
+            <div class="tabs" role="tablist" aria-label="Sections">
+                <button class="tab" role="tab" id="tab-about" aria-controls="panel-about" aria-selected="true" data-tab="about">About</button>
+                <button class="tab" role="tab" id="tab-portfolio" aria-controls="panel-portfolio" aria-selected="false" tabindex="-1" data-tab="portfolio">Portfolio</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="tab-panel" role="tabpanel" id="panel-about" aria-labelledby="tab-about">
+        <div class="container">
             <p> With a mixed background in molecular biology and computational science, I am exploring the cross-pollination of natural and artificial systems. My interests include network models, multi-agent systems exhibiting <a href="https://marcellobarylli.substack.com/p/artificial-intelligence-and-collective" target="_blank" rel="noopener noreferrer">collective intelligence</a> and an information-theoretical view on biology. I am currently working on <a href="papers/self-organising-digital-circuits/">Self-Organising Digital Circuits</a>, as well as modelling morphogenesis via diffusion models..
             <!-- <p> At the intersection of complexity science and artificial intelligence. Researching collectives, graph neural networks and biology. -->
             </p>
@@ -47,13 +56,32 @@
                 </ul>
             </nav>
         </div>
-    </header>
 
-    <section class="animation-section">
-        <div id="diffusion-container" class="diffusion-container">
-            <!-- Particles will be generated here by JavaScript -->
+        <section class="animation-section">
+            <div id="diffusion-container" class="diffusion-container">
+                <!-- Particles will be generated here by JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <div class="tab-panel" role="tabpanel" id="panel-portfolio" aria-labelledby="tab-portfolio" hidden>
+        <div class="container portfolio">
+            <article class="project">
+                <a class="project-shot" href="https://marcellobarylli.github.io/DJ_Graphyla/" target="_blank" rel="noopener noreferrer">
+                    <img src="portfolio/graphjane-y2k-set.jpg" width="1440" height="900" loading="lazy" alt="GraphJane in its Y2K Futurism look on desktop: a DJ set with its tempo curve rising from 122 to 127 BPM, the first transition's mix points, and two chrome DJ figures either side of the page.">
+                </a>
+                <div class="project-body">
+                    <h2>GraphJane</h2>
+                    <p class="project-lede">Obsidian for DJs. Every song is a node and every transition you have found to work is a directed edge, storing where to mix out, where to mix in and the tempo of both tracks. A DJ set is a walk through that graph.</p>
+                    <p>Most DJs keep this knowledge in their heads or in scattered notes. GraphJane turns it into a map you can build on: log a new mix in one card, see every way out of the song that is playing, plan sets with their tempo curve, and follow a bar clock that counts down to the next mix during the gig. It installs on a phone, works offline, and keeps separate crates per genre, like Obsidian vaults.</p>
+                    <ul class="project-links">
+                        <li><a href="https://marcellobarylli.github.io/DJ_Graphyla/" target="_blank" rel="noopener noreferrer">Open the app</a></li>
+                        <li><a href="https://github.com/marcellobarylli/DJ_Graphyla" target="_blank" rel="noopener noreferrer">Source on GitHub</a></li>
+                    </ul>
+                </div>
+            </article>
         </div>
-    </section>
+    </div>
 
     <script>
         const container = document.getElementById('diffusion-container');
@@ -361,7 +389,7 @@
 
         // --- Handle Page Visibility ---
          document.addEventListener("visibilitychange", () => {
-            if (!document.hidden) {
+            if (!document.hidden && !document.getElementById('panel-about').hidden) {
                 // console.log("Page became visible, ensuring animation runs.");
                 // If animation was paused due to being hidden, restart the toggle cycle
                  clearTimeout(animationTimeoutId); // Clear any pending check
@@ -376,8 +404,33 @@
         // --- Initial Load ---
         // Use DOMContentLoaded to ensure the container element exists and has dimensions
         document.addEventListener('DOMContentLoaded', (event) => {
-             initializeAnimation();
+             showTab(location.hash === '#portfolio' ? 'portfolio' : 'about', false);
         });
+
+        // --- Tabs ---
+        const tabs = Array.from(document.querySelectorAll('.tab'));
+        function showTab(name, updateHash = true) {
+            tabs.forEach(tab => {
+                const on = tab.dataset.tab === name;
+                tab.setAttribute('aria-selected', on);
+                tab.tabIndex = on ? 0 : -1;
+                document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
+            });
+            if (updateHash) history.replaceState(null, '', name === 'about' ? location.pathname : '#' + name);
+            clearTimeout(animationTimeoutId);
+            // The particles need the container's size, which is zero while the panel is hidden.
+            if (name === 'about') initializeAnimation();
+        }
+        tabs.forEach((tab, i) => {
+            tab.addEventListener('click', () => showTab(tab.dataset.tab));
+            tab.addEventListener('keydown', e => {
+                if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+                const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+                next.focus();
+                showTab(next.dataset.tab);
+            });
+        });
+        window.addEventListener('hashchange', () => showTab(location.hash === '#portfolio' ? 'portfolio' : 'about', false));
 
     </script>
 </body>
