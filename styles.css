@@ -269,6 +269,48 @@ header .container { padding-bottom: 0; }
     color: var(--button-hover-text-color);
 }
 
+.project h3 {
+    color: var(--title-color);
+    font-size: 19px;
+    margin: 26px 0 8px;
+}
+
+.research {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.research li {
+    color: var(--text-color);
+    font-size: 17px;
+    line-height: 1.45;
+    margin: 0 0 10px;
+}
+
+.research strong { color: var(--title-color); }
+
+.references {
+    color: var(--text-color);
+    margin: 14px 0 0;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.references summary {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.references summary:hover { opacity: 1; }
+
+.references ol { padding-left: 20px; }
+
+.references li { margin: 0 0 8px; }
+
+.references a { color: #FFBF00; text-decoration: none; }
+
+.references a:hover { color: #FFE082; text-decoration: underline; }
+
 @media screen and (max-width: 700px) {
     .tabs { justify-content: center; }
     .project-body { padding: 4px 16px 16px; }
