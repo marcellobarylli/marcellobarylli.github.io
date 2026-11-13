@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Marcello Barylli</title>
     <link rel="stylesheet" href="styles.css" type="text/css">
@@ -30,7 +30,10 @@
         <div class="container">
             <div class="profile-header">
                 <img class="profile" src="portrait_white2.JPG" alt="Profile picture of Marcello Barylli">
-                <h1>Marcello Barylli</h1>
+                <div>
+                    <h1>Marcello Barylli</h1>
+                    <p class="subtitle">PhD Student at the Robotics, Evolution and Artificial Life Lab (ITU Copenhagen)</p>
+                </div>
             </div>
             <div class="tabs" role="tablist" aria-label="Sections">
                 <button class="tab" role="tab" id="tab-about" aria-controls="panel-about" aria-selected="true" data-tab="about">About</button>
@@ -41,38 +44,75 @@
 
     <div class="tab-panel" role="tabpanel" id="panel-about" aria-labelledby="tab-about">
         <div class="container">
-            <p> With a mixed background in molecular biology and computational science, I am exploring the cross-pollination of natural and artificial systems. My interests include network models, multi-agent systems exhibiting <a href="https://marcellobarylli.substack.com/p/artificial-intelligence-and-collective" target="_blank" rel="noopener noreferrer">collective intelligence</a> and an information-theoretical view on biology. I am currently working on <a href="papers/self-organising-digital-circuits/">Self-Organising Digital Circuits</a>, as well as modelling morphogenesis via diffusion models..
-            <!-- <p> At the intersection of complexity science and artificial intelligence. Researching collectives, graph neural networks and biology. -->
-            </p>
+            <p>With a mixed background in molecular biology and computational science, I am exploring the cross-pollination of natural and artificial systems. My interests include multi-agent systems for scientific discovery, <a href="https://marcellobarylli.substack.com/p/artificial-intelligence-and-collective" target="_blank" rel="noopener noreferrer">collective intelligence</a> in AI and an information-theoretical view on biology. Past work includes <a href="https://self-organising-circuits.github.io/" target="_blank" rel="noopener noreferrer">Self-Organising Digital Circuits</a>.</p>
             <nav>
                 <ul>
-                    <li><a href="https://github.com/marcellobarylli" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Github profile">🚀</span> Github</a></li>
-                    <li><a href="mailto:marcello.barylli@gmail.com" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Email Link">📬</span> Email</a></li>
-                    <li><a href="https://scholar.google.com/citations?user=Hq68F_IAAAAJ&hl=en&oi=sra" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Google Scholar">🎓</span> Research</a></li>
-                    <li><a href="MarcelloBarylliCV.pdf" download><span role="img" aria-label="Link to download CV">📜</span> CV</a></li>
-                    <li><a href="https://twitter.com/marcellobarylli" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to X profile">🐦</span> Twitter</a></li>
-                    <li><a href="https://marcellobarylli.substack.com/archive" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="Link to Blog">📝</span> Blog</a></li>
-                    <li><a href="https://www.linkedin.com/in/marcello-barylli-20b006177" target="_blank" rel="noopener noreferrer"><span role="img" aria-label="LinkedIn profile link">💼</span> LinkedIn</a></li>
+                    <li><a href="https://github.com/marcellobarylli" target="_blank" rel="noopener noreferrer">Github</a></li>
+                    <li><a href="mailto:marcello.barylli@gmail.com" target="_blank" rel="noopener noreferrer">Email</a></li>
+                    <li><a href="https://scholar.google.com/citations?user=Hq68F_IAAAAJ&hl=en&oi=sra" target="_blank" rel="noopener noreferrer">Research</a></li>
+                    <li><a href="MarcelloBarylliCV.pdf" download>CV</a></li>
+                    <li><a href="https://twitter.com/marcellobarylli" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                    <li><a href="https://marcellobarylli.substack.com/archive" target="_blank" rel="noopener noreferrer">Blog</a></li>
+                    <li><a href="https://www.linkedin.com/in/marcello-barylli-20b006177" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 </ul>
             </nav>
-        </div>
 
-        <section class="animation-section">
-            <div id="diffusion-container" class="diffusion-container">
-                <!-- Particles will be generated here by JavaScript -->
-            </div>
-        </section>
+            <section class="publications">
+                <h2>Publications</h2>
+                <ol>
+                    <li>
+                        <a class="pub-title" href="https://arxiv.org/abs/2609.29755" target="_blank" rel="noopener noreferrer">On Growth and Form, and Function: Reusable Regulatory Handles Control Phenotypic Variation</a>
+                        <span class="pub-authors">Benedikt Hartl, Milton L. Montero, <strong>Marcello Barylli</strong>, Sebastian Risi, Michael Levin</span>
+                        <span class="pub-venue"><em>arXiv preprint</em>, 2026</span>
+                        <span class="pub-links"><a href="https://arxiv.org/abs/2609.29755" target="_blank" rel="noopener noreferrer">arXiv</a></span>
+                    </li>
+                    <li>
+                        <a class="pub-title" href="https://self-organising-circuits.github.io/" target="_blank" rel="noopener noreferrer">Self-Organising Digital Circuits</a>
+                        <span class="pub-authors"><strong>Marcello Barylli</strong>*, Gabriel Béna*, Alexander Mordvintsev, Eleni Nisioti, Sebastian Risi</span>
+                        <span class="pub-venue"><em>ALIFE 2026: Proceedings of the Artificial Life Conference</em>, 2026</span>
+                        <span class="pub-links"><a href="https://doi.org/10.1162/isal.a.967" target="_blank" rel="noopener noreferrer">Paper</a><a href="https://arxiv.org/abs/2608.02606" target="_blank" rel="noopener noreferrer">arXiv</a><a href="https://self-organising-circuits.github.io/" target="_blank" rel="noopener noreferrer">Project page</a></span>
+                    </li>
+                    <li>
+                        <a class="pub-title" href="https://doi.org/10.1093/bioinformatics/btag353" target="_blank" rel="noopener noreferrer">Network methods for diagonal integration of unpaired single-cell multiomics data: a review</a>
+                        <span class="pub-authors"><strong>Marcello Barylli</strong>, Joyaditya Saha, Tineke E. Buffart, Jan Koster, Kristiaan J. Lenos, Louis Vermeulen, Roland V. Bumbuc, Vivek M. Sheraton</span>
+                        <span class="pub-venue"><em>Bioinformatics</em> 42(6), btag353, 2026</span>
+                        <span class="pub-links"><a href="https://doi.org/10.1093/bioinformatics/btag353" target="_blank" rel="noopener noreferrer">Paper</a></span>
+                    </li>
+                    <li>
+                        <a class="pub-title" href="https://doi.org/10.1162/isal.a.845" target="_blank" rel="noopener noreferrer">Hypernetworks That Evolve Themselves</a>
+                        <span class="pub-authors">Joachim Winther Pedersen, Erwan Plantec, Eleni Nisioti, <strong>Marcello Barylli</strong>, Milton Montero, Kathrin Korte, Sebastian Risi</span>
+                        <span class="pub-venue"><em>ALIFE 2025: Proceedings of the Artificial Life Conference</em>, 2025</span>
+                        <span class="pub-links"><a href="https://doi.org/10.1162/isal.a.845" target="_blank" rel="noopener noreferrer">Paper</a></span>
+                    </li>
+                </ol>
+                <p class="pub-note">* Equal contribution.</p>
+            </section>
+        </div>
     </div>
 
     <div class="tab-panel" role="tabpanel" id="panel-portfolio" aria-labelledby="tab-portfolio" hidden>
         <div class="container portfolio">
+            <article class="project">
+                <div class="project-shot project-demo">
+                    <div id="sodc-demo"></div>
+                </div>
+                <div class="project-body">
+                    <h2>Self-Organising Digital Circuits</h2>
+                    <p class="project-lede">Extending the Neural Cellular Automata paradigm from pattern formation on grids to functional logic generation and self-repair on arbitrary graphs.</p>
+                    <p>The circuit above assembles and repairs itself live in your browser: the trained policy running as you watch, not a pre-recorded animation.</p>
+                    <ul class="project-links">
+                        <li><a href="https://self-organising-circuits.github.io/" target="_blank" rel="noopener noreferrer">Read the paper</a></li>
+                    </ul>
+                </div>
+            </article>
+
             <article class="project">
                 <a class="project-shot" href="https://marcellobarylli.github.io/DJ_Graphyla/" target="_blank" rel="noopener noreferrer">
                     <img src="portfolio/graphjane-y2k-set.jpg" width="2164" height="900" loading="lazy" alt="GraphJane in its Y2K Futurism look on desktop. Left: a DJ set with its tempo curve rising from 122 to 127 BPM, the first transition's mix points, and two chrome DJ figures either side of the page. Right: the song graph with the same set drawn over it as a numbered amber walk.">
                 </a>
                 <div class="project-body">
                     <h2>GraphJane</h2>
-                    <p class="project-lede">Obsidian for DJs. Every song is a node and every transition you have found to work is a directed edge, storing where to mix out, where to mix in and the tempo of both tracks. A DJ set is a walk through that graph.</p>
+                    <p class="project-lede"><a href="https://obsidian.md/" target="_blank" rel="noopener noreferrer">Obsidian</a> for DJs. Every song is a node and every transition you have found to work is a directed edge, storing where to mix out, where to mix in and the tempo of both tracks. A DJ set is a walk through that graph.</p>
                     <p>Most DJs keep this knowledge in their heads or in scattered notes. GraphJane turns it into a map you can build on: log a new mix in one card, see every way out of the song that is playing, plan sets with their tempo curve, and follow a bar clock that counts down to the next mix during the gig. It installs on a phone, works offline, and keeps separate crates per genre, like Obsidian vaults.</p>
                     <ul class="project-links">
                         <li><a href="https://marcellobarylli.github.io/DJ_Graphyla/" target="_blank" rel="noopener noreferrer">Open the app</a></li>
@@ -84,329 +124,6 @@
     </div>
 
     <script>
-        const container = document.getElementById('diffusion-container');
-        const particleCount = 200;
-        const particles = [];
-        const diffusionTime = 5000; // Increased duration (milliseconds)
-        const pauseTime = 500; // Pause
-
-        let isDiffused = false;
-        let animationTimeoutId = null;
-
-        let containerWidth = container.offsetWidth;
-        let containerHeight = container.offsetHeight;
-        let centerX = containerWidth / 2;
-        let centerY = containerHeight / 2;
-
-        // --- Define Submarine Shape Points ---
-        const submarinePoints = [
-            { x: -0.8, y: 0.0 },   // 0: Nose tip
-            { x: -0.6, y: 0.2 },   // 1
-            { x: -0.3, y: 0.25 },  // 2
-            { x: -0.25, y: 0.25 }, // 3: Base of tower front
-            { x: -0.2, y: 0.5 },   // 4: Top front of tower
-            { x: 0.1, y: 0.55 },  // 5: Top middle of tower
-            { x: 0.15, y: 0.5 },  // 6: Top back of tower
-            { x: 0.20, y: 0.25 }, // 7: Base of tower back
-            { x: 0.3, y: 0.25 },  // 8
-            { x: 0.6, y: 0.2 },   // 9
-            // Tail section modified to include fin
-            { x: 0.8, y: 0.1 },   // 10: Top of tail fin base
-            { x: 0.95, y: 0.05 }, // 11: Top-rear corner of fin
-            { x: 0.95, y: -0.05 },// 12: Bottom-rear corner of fin
-            { x: 0.8, y: -0.1 },  // 13: Bottom of tail fin base
-            // Bottom edge of hull moving forwards
-            { x: 0.6, y: -0.2 },   // 14
-            { x: 0.3, y: -0.25 },  // 15
-            { x: 0.0, y: -0.25 }, // New Middle Bottom Point (16)
-            { x: -0.3, y: -0.25 }, // 17 (was 16)
-            { x: -0.6, y: -0.2 },   // 18 (was 17)
-            { x: -0.8, y: 0.0 }    // Connects back to point 0 (19)
-        ];
-        // Removed topFinPoints array
-
-        // Periscope Coordinates (lowered top)
-        const periscopeLine = [
-            { x: 0.0, y: 0.55 }, // Start on tower (same)
-            { x: 0.0, y: 0.65 }, // Go straight up to the bend (was 0.7)
-            { x: 0.15, y: 0.65 } // Go horizontally forward/right (was 0.7)
-        ];
-        // Coordinates for window centers
-        const windowCenters = [
-            { x: -0.3, y: 0.0 }, // Left window
-            { x: 0.0,  y: 0.0 }, // Center window
-            { x: 0.3,  y: 0.0 }  // Right window
-        ];
-
-        // --- Helper: Generate Gaussian Random Numbers ---
-        function generateGaussianPair() {
-            let u1 = 0, u2 = 0;
-            while (u1 === 0) u1 = Math.random();
-            u2 = Math.random();
-            const R = Math.sqrt(-2.0 * Math.log(u1));
-            const theta = 2.0 * Math.PI * u2;
-            const z0 = R * Math.cos(theta);
-            const z1 = R * Math.sin(theta);
-            return [z0, z1];
-        }
-
-        // --- Create Particles ---
-        function createParticles() {
-            if (!container) return; // Exit if container not found
-
-            containerWidth = container.offsetWidth;
-            containerHeight = container.offsetHeight;
-            centerX = containerWidth / 2;
-            centerY = containerHeight / 2;
-
-            container.innerHTML = '';
-            particles.length = 0;
-
-            if (containerWidth <= 0 || containerHeight <= 0) { 
-                console.warn("Diffusion container has zero dimensions. Cannot create particles.");
-                return; 
-            }
-
-            // --- Combine all shape points ---
-            // const allShapePoints = [...catFacePoints];
-            // whiskers.forEach(whisker => allShapePoints.push(...whisker.points));
-            const allShapePoints = [...submarinePoints, ...periscopeLine, ...windowCenters]; // Removed topFinPoints
-
-            // --- Calculate Centroid of the shape points ---
-            let sumX = 0;
-            let sumY = 0;
-            allShapePoints.forEach(p => {
-                sumX += p.x;
-                sumY += p.y;
-            });
-            const avgX = sumX / allShapePoints.length;
-            const avgY = sumY / allShapePoints.length; // Average Y of the defined shape points
-            // console.log(`Shape centroid (relative): avgX=${avgX.toFixed(3)}, avgY=${avgY.toFixed(3)}`);
-
-            // --- Calculate offset needed to center the shape vertically ---
-            const offsetY_shape = -avgY;
-            // console.log(`Applying vertical offset: ${offsetY_shape.toFixed(3)}`);
-
-            // --- Create particles ---
-            const scaleX = containerWidth / 2;
-            const scaleY = containerHeight / 2;
-
-            // Store lengths for color coding
-            const subLength = submarinePoints.length;
-            const periLength = periscopeLine.length;
-            // windowCenters length is implicitly the rest
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                const pointIndex = i % allShapePoints.length;
-                const relativePoint = allShapePoints[pointIndex];
-
-                // Determine particle color based on its source point
-                let particleColor;
-                if (pointIndex < subLength) { // Submarine Body
-                    particleColor = '#FFBF00'; // Light Yellow
-                } else if (pointIndex < subLength + periLength) { // Periscope
-                    particleColor = '#FFFFE0'; // Light Yellow
-                } else { // Window Centers
-                    particleColor = '#ADD8E6'; // Light Blue
-                }
-                particle.style.backgroundColor = particleColor;
-
-                // *** Apply vertical centering offset to the relative point ***
-                const adjustedY = relativePoint.y + offsetY_shape;
-                // Keep original X (no horizontal centering applied)
-                const adjustedX = relativePoint.x;
-
-                // Add slight randomness for cloud effect
-                const randomOffsetX = (Math.random() - 0.5) * 6;
-                const randomOffsetY = (Math.random() - 0.5) * 6;
-
-                // Calculate final absolute position using adjusted Y
-                const initialX = centerX + adjustedX * scaleX + randomOffsetX;
-                const initialY = centerY - adjustedY * scaleY + randomOffsetY; // Invert Y-axis for correct orientation
-
-                // Store original initial positions for diffusion calculation relative to centered shape
-                particle.dataset.initialX = initialX;
-                particle.dataset.initialY = initialY;
-
-                // Set CSS position
-                particle.style.left = `${initialX}px`;
-                particle.style.top = `${initialY}px`;
-
-                // Set initial transform (just centering the dot itself)
-                const initialTransform = 'translate(-50%, -50%)';
-                particle.style.transform = initialTransform;
-                particle.dataset.initialTransform = initialTransform;
-
-                container.appendChild(particle);
-                particles.push(particle);
-            }
-            // console.log(`Created ${particles.length} particles using ${allShapePoints.length} shape points.`);
-        }
-
-        // --- Diffusion Animation (Using Tighter Gaussian Distribution) ---
-        function diffuse() {
-            // console.log("Diffusing (Tighter Gaussian)...");
-            if (particles.length === 0 || !container) return;
-
-             // Recalculate dimensions in case they changed slightly
-            containerWidth = container.offsetWidth;
-            containerHeight = container.offsetHeight;
-
-            if (containerWidth <= 0 || containerHeight <= 0) return; // Skip if no size
-
-            // Standard deviation for the Gaussian spread (using / 8 from context)
-            const stdDevX = containerWidth / 10;
-            const stdDevY = containerHeight / 8;
-
-            particles.forEach(particle => {
-                const initialX = parseFloat(particle.dataset.initialX);
-                const initialY = parseFloat(particle.dataset.initialY);
-
-                if (isNaN(initialX) || isNaN(initialY)) {
-                    console.warn("Invalid initial position for particle", particle);
-                    return;
-                }
-
-                const [gaussX, gaussY] = generateGaussianPair();
-
-                let targetX = initialX + gaussX * stdDevX;
-                let targetY = initialY + gaussY * stdDevY;
-
-                // Clamp targets to container bounds
-                targetX = Math.max(0, Math.min(containerWidth, targetX));
-                targetY = Math.max(0, Math.min(containerHeight, targetY));
-
-                const deltaX = targetX - initialX;
-                const deltaY = targetY - initialY;
-
-                particle.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
-            });
-
-            isDiffused = true;
-            clearTimeout(animationTimeoutId);
-            animationTimeoutId = setTimeout(toggleState, diffusionTime + pauseTime);
-        }
-
-        // --- Reversal Animation (Remains the same) ---
-        function reverse() {
-            // console.log("Reversing...");
-            if (particles.length === 0) return;
-            particles.forEach(particle => {
-                particle.style.transform = particle.dataset.initialTransform;
-            });
-            isDiffused = false;
-            clearTimeout(animationTimeoutId);
-            animationTimeoutId = setTimeout(toggleState, diffusionTime + pauseTime);
-        }
-
-        // --- Toggle State ---
-        function toggleState() {
-             if (!document.hidden) { // Only run animation if the page is visible
-                if (isDiffused) {
-                    reverse();
-                } else {
-                    diffuse();
-                }
-            } else {
-                 // If page is hidden, clear timeout and check again later
-                clearTimeout(animationTimeoutId);
-                animationTimeoutId = setTimeout(toggleState, pauseTime); // Check again after a short pause
-            }
-        }
-        
-        // --- Set Initial Diffused State (No Animation) ---
-        function setInitialDiffusedState() {
-            if (particles.length === 0 || !container) return;
-
-            // Recalculate dimensions just in case
-            containerWidth = container.offsetWidth;
-            containerHeight = container.offsetHeight;
-            if (containerWidth <= 0 || containerHeight <= 0) return;
-
-            const stdDevX = containerWidth / 10;
-            const stdDevY = containerHeight / 8;
-
-            particles.forEach(particle => {
-                const initialX = parseFloat(particle.dataset.initialX);
-                const initialY = parseFloat(particle.dataset.initialY);
-
-                if (isNaN(initialX) || isNaN(initialY)) return;
-
-                const [gaussX, gaussY] = generateGaussianPair();
-
-                let targetX = initialX + gaussX * stdDevX;
-                let targetY = initialY + gaussY * stdDevY;
-
-                targetX = Math.max(0, Math.min(containerWidth, targetX));
-                targetY = Math.max(0, Math.min(containerHeight, targetY));
-
-                const deltaX = targetX - initialX;
-                const deltaY = targetY - initialY;
-
-                // Apply transform directly, bypassing CSS transition for the initial setup
-                particle.style.transition = 'none'; // Temporarily disable transition
-                particle.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
-            });
-
-             // Use requestAnimationFrame to ensure the styles are applied, then re-enable transitions
-            requestAnimationFrame(() => {
-                particles.forEach(particle => {
-                     // Remove the inline style to let the CSS class transition take over again
-                    particle.style.transition = ''; 
-                });
-            });
-        }
-
-        // --- Initialization ---
-        function initializeAnimation() {
-            createParticles(); // Creates particles at shape position
-            if (particles.length > 0) {
-                setInitialDiffusedState(); // Move particles to diffused state instantly
-                isDiffused = true;         // Set the initial state flag
-
-                clearTimeout(animationTimeoutId);
-                 // Check visibility before starting
-                if (!document.hidden) {
-                   animationTimeoutId = setTimeout(toggleState, pauseTime * 2); // Start animation after a delay
-                } else {
-                    animationTimeoutId = setTimeout(toggleState, pauseTime * 2); // Schedule check even if hidden initially
-                }
-            }
-        }
-
-        // --- Handle window resize ---
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                // console.log("Window resized - recreating particles.");
-                clearTimeout(animationTimeoutId);
-                initializeAnimation(); // Recreate particles and restart animation logic
-            }, 250); // Debounce resize events
-        });
-
-        // --- Handle Page Visibility ---
-         document.addEventListener("visibilitychange", () => {
-            if (!document.hidden && !document.getElementById('panel-about').hidden) {
-                // console.log("Page became visible, ensuring animation runs.");
-                // If animation was paused due to being hidden, restart the toggle cycle
-                 clearTimeout(animationTimeoutId); // Clear any pending check
-                 toggleState(); // Immediately try to run the next step
-            } else {
-                // console.log("Page became hidden, pausing animation timer.");
-                // No need to immediately stop CSS transitions, just stop the JS timer
-                 clearTimeout(animationTimeoutId);
-            }
-        });
-
-        // --- Initial Load ---
-        // Use DOMContentLoaded to ensure the container element exists and has dimensions
-        document.addEventListener('DOMContentLoaded', (event) => {
-             showTab(location.hash === '#portfolio' ? 'portfolio' : 'about', false);
-        });
-
         // --- Tabs ---
         const tabs = Array.from(document.querySelectorAll('.tab'));
         function showTab(name, updateHash = true) {
@@ -417,9 +134,24 @@
                 document.getElementById(tab.getAttribute('aria-controls')).hidden = !on;
             });
             if (updateHash) history.replaceState(null, '', name === 'about' ? location.pathname : '#' + name);
-            clearTimeout(animationTimeoutId);
-            // The particles need the container's size, which is zero while the panel is hidden.
-            if (name === 'about') initializeAnimation();
+            if (name === 'portfolio') loadCircuitsDemo();
+        }
+
+        // --- Self-Organising Digital Circuits demo ---
+        // Runs the live demo from the paper site. It fetches its data from the root-relative
+        // /assets/sodc-demo/, so those requests are pointed at the paper site. Loaded on first
+        // view of the Portfolio tab, because its canvases need the panel to be visible to size.
+        const SODC_ORIGIN = 'https://self-organising-circuits.github.io';
+        let circuitsDemoLoaded = false;
+        function loadCircuitsDemo() {
+            if (circuitsDemoLoaded) return;
+            circuitsDemoLoaded = true;
+            const fetchOriginal = window.fetch.bind(window);
+            window.fetch = (input, init) => {
+                if (typeof input === 'string' && input.startsWith('/assets/sodc-demo/')) input = SODC_ORIGIN + input;
+                return fetchOriginal(input, init);
+            };
+            import(SODC_ORIGIN + '/assets/sodc-demo/main.js').catch(err => console.error('Circuits demo failed to load', err));
         }
         tabs.forEach((tab, i) => {
             tab.addEventListener('click', () => showTab(tab.dataset.tab));
@@ -431,7 +163,7 @@
             });
         });
         window.addEventListener('hashchange', () => showTab(location.hash === '#portfolio' ? 'portfolio' : 'about', false));
-
+        showTab(location.hash === '#portfolio' ? 'portfolio' : 'about', false);
     </script>
 </body>
 </html>

@@ -1,276 +1,337 @@
-:root {
-    --background-color: #111827; /* Very dark blue-gray */
-    --title-color: #dfeef4;
-    --text-color: #f1f4f5;
-    --button-color: #f6f7f7;
-    --button-text-color: #f6f7f7;
-    --button-hover-color: #d7d8d8;
-    --button-hover-text-color: #254958;
+/* Book-style theme: black on white, ET Book typography (from Tufte CSS, MIT licence) */
+
+@font-face {
+    font-family: "et-book";
+    src: url("fonts/et-book/et-book-roman-line-figures.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
+@font-face {
+    font-family: "et-book";
+    src: url("fonts/et-book/et-book-display-italic-old-style-figures.woff") format("woff");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "et-book";
+    src: url("fonts/et-book/et-book-bold-line-figures.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --background-color: #ffffff;
+    --text-color: #111111;
+    --muted-color: #6b6b6b;
+    --rule-color: #d8d8d8;
+}
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
     margin: 0;
     padding: 0;
     background-color: var(--background-color);
-    line-height: 1.25; /* Increase line spacing */
+    color: var(--text-color);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 .container {
-    max-width: 700px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 32px 24px 48px;
+}
+
+header .container {
+    padding-top: 72px;
+    padding-bottom: 0;
 }
 
 .profile-header {
     display: flex;
     align-items: center;
+    gap: 28px;
+    margin-bottom: 28px;
 }
 
 .profile {
-    width: 150px;
-    height: 150px;
+    width: 128px;
+    height: 128px;
     border-radius: 50%;
-    margin-right: 20px;
+    object-fit: cover;
 }
 
 h1 {
-    color: var(--title-color);
+    font-size: 44px;
+    font-weight: normal;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0;
 }
 
 p {
-    color: var(--text-color);
-    text-align: center; /* center align text */
-    font-size: 18px;
+    font-size: 21px;
+    margin: 0 0 28px;
 }
 
-nav ul {
+p.subtitle {
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.35;
+    color: var(--muted-color);
+    margin: 8px 0 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: var(--muted-color);
+}
+
+a:hover {
+    text-decoration-color: var(--text-color);
+}
+
+/* Small-caps labels shared by the tabs and link rows */
+.tab,
+nav ul li a,
+.project-links a {
+    font-family: inherit;
+    font-size: 19px;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    text-decoration: none;
+}
+
+nav {
+    border-top: 1px solid var(--rule-color);
+    padding-top: 20px;
+}
+
+nav ul,
+.project-links {
     list-style-type: none;
     padding: 0;
+    margin: 0;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 28px;
 }
 
-nav ul li {
-    flex: 1 1 auto;
-    margin: 0 10px;
-    text-align: center;
-}
-
-nav ul li a {
-    color: var(--button-text-color);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 0;
-    background-color: transparent;
-    border: 1px solid var(--button-color);
-    border-radius: 2px; /* rounded corners */
-    transition: background-color 0.1s, color 0.1s, transform 0.1s; /* animate color and scaling */
-    width: 100%;
-}
-
-/* Apply hover effects only for non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-    nav ul li a:hover {
-        background-color: var(--button-hover-color);
-        color: var(--button-hover-text-color);
-        text-decoration: none;
-        transform: scale(1.05); /* slight increase in size on hover */
-    }
-}
-
-/* For touch devices use active state instead of hover */
-nav ul li a:active {
-    background-color: var(--button-hover-color);
-    color: var(--button-hover-text-color);
-    text-decoration: none;
-    transform: scale(1.05); /* slight increase in size on press */
-}
-
-@media screen and (max-width: 700px) {
-    .profile-header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        margin-bottom: -10px;  /* reduce space */
-    }
-  
-    .profile {
-        width: 150px;  /* increase size */
-        height: 150px; /* increase size */
-        margin: 10px auto; /* center image and increase vertical space */
-    }
-  
-    p {
-        text-align: center; /* center align text */
-        max-width: 100%; /* prevent text from overflowing */
-        font-size: 20px; /* increase font size */
-    }
-
-    nav ul {
-        flex-direction: column;
-        align-items: stretch; /* stretch to fill the parent */
-        padding: 0 20px;
-    }
-
-    nav ul li {
-        margin: 9px auto; /* increase vertical spacing, center the buttons */
-        width: 55%; /* decrease the width */
-    }
-}
-
-/* --- Diffusion Animation Styles --- */
-
-.animation-section {
-    /* Revert to normal flow */
-    display: flex;
-    justify-content: center;
-    padding: 0; /* Removed all padding to move higher */
-    /* Removed absolute positioning properties */
-}
-
-.diffusion-container {
-    position: relative; /* Keep relative for particle positioning */
-    width: 90vw;  /* Wider */
-    height: 65vh; /* Adjusted height */
-    /* Match the main page background */
-    background-color: var(--background-color);
-    /*border: 1px solid var(--text-color); /* Use text color for border */
-    overflow: hidden; /* Hide particles moving outside */
-    border-radius: 0.75rem; /* Rounded corners */
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    margin: 20px auto; /* Center the container and add margin */
-}
-
-.particle {
-    position: absolute;
-    width: 5px; /* Particle size */
-    height: 5px; /* Particle size */
-    border-radius: 50%; /* Make particles circular */
-    opacity: 1; /* Make particles transparent */
-    /* Transition for smooth movement - matches JS duration */
-    transition: transform 5s ease-in-out; /* Increased duration */
-    z-index: 1; /* Ensure particles render above background */
-    /* Initial transform centers the particle dot on its top/left coordinate */
-    transform: translate(-50%, -50%);
-    user-select: none; /* Prevent user selection */
-}
-
-/* Removed media queries for diffusion-container size */
-
-/* Style for the specific link in the bio paragraph */
-.container p a {
-    color: #FFBF00; /* Submarine yellow */
-    text-decoration: none; /* Optional: remove underline */
-}
-
-/* Optional: Add a hover effect */
-.container p a:hover {
+nav ul li a:hover,
+.project-links a:hover {
     text-decoration: underline;
-    color: #FFE082; /* Slightly lighter yellow on hover */
 }
 
+/* --- Publications --- */
+.publications {
+    margin-top: 56px;
+}
+
+.publications h2 {
+    font-size: 30px;
+    font-weight: normal;
+    line-height: 1.2;
+    margin: 0 0 20px;
+}
+
+.publications ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.publications li {
+    margin: 0 0 26px;
+}
+
+.publications li > span {
+    display: block;
+    font-size: 18px;
+    line-height: 1.45;
+}
+
+a.pub-title {
+    font-size: 21px;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+a.pub-title:hover {
+    text-decoration: underline;
+}
+
+.pub-authors strong {
+    font-weight: bold;
+}
+
+.pub-venue {
+    color: var(--muted-color);
+}
+
+.publications .pub-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
+    margin-top: 4px;
+}
+
+.pub-links a {
+    font-size: 16px;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    text-decoration: none;
+}
+
+.pub-links a:hover {
+    text-decoration: underline;
+}
+
+.publications p.pub-note {
+    font-size: 16px;
+    color: var(--muted-color);
+    margin: 0;
+}
 
 /* --- Tabs --- */
 .tabs {
     display: flex;
-    gap: 8px;
-    margin-top: 20px;
-    border-bottom: 1px solid rgb(246 247 247 / 0.25);
+    gap: 28px;
+    border-bottom: 1px solid var(--rule-color);
 }
 
 .tab {
-    font: inherit;
-    font-size: 17px;
-    color: var(--text-color);
+    color: var(--muted-color);
     background: transparent;
     border: 0;
-    border-bottom: 2px solid transparent;
-    padding: 10px 16px;
+    border-bottom: 1px solid transparent;
+    padding: 6px 0 8px;
     margin-bottom: -1px;
     cursor: pointer;
-    opacity: 0.7;
 }
 
-.tab:hover { opacity: 1; }
+.tab:hover { color: var(--text-color); }
 
 .tab[aria-selected="true"] {
-    opacity: 1;
-    border-bottom-color: #FFBF00; /* Submarine yellow */
+    color: var(--text-color);
+    border-bottom-color: var(--text-color);
 }
 
 .tab:focus-visible {
-    outline: 2px solid #FFBF00;
-    outline-offset: 2px;
+    outline: 1px solid var(--text-color);
+    outline-offset: 3px;
 }
-
-header .container { padding-bottom: 0; }
 
 .tab-panel[hidden] { display: none; }
 
 /* --- Portfolio --- */
-.portfolio { max-width: 900px; }
-
 .project {
-    border: 1px solid rgb(246 247 247 / 0.2);
-    border-radius: 0.75rem;
-    overflow: hidden;
-    background-color: rgb(255 255 255 / 0.03);
-    margin: 10px 0 40px;
+    margin: 0 0 48px;
 }
 
-.project-shot { display: block; }
+/* Full-width figure: wider than the text column, centred on it */
+.project-shot {
+    display: block;
+    position: relative;
+    left: 50%;
+    width: min(852px, calc(100vw - 48px));
+    transform: translateX(-50%);
+}
+
+.project-demo {
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+/* Compact the demo to about half its height at full width. It sets the circuit height inline
+   and sizes its drawing from the rendered heights, so these need to win over inline styles. */
+.project-demo .sodc-image-panel { padding: 0.6em 0.8em; }
+.project-demo .sodc-image-row { margin: 0.15em 0; }
+.project-demo .sodc-image-canvas { height: 30px !important; }
+.project-demo .sodc-circuit-canvas { height: 160px !important; }
+.project-demo .sodc-chart-canvas { height: 90px !important; }
+.project-demo .sodc-controls { margin: 0.4em 0; }
 
 .project-shot img {
     display: block;
     width: 100%;
     height: auto;
+    border: 1px solid var(--rule-color);
 }
 
-.project-body { padding: 4px 24px 20px; }
-
 .project h2 {
-    color: var(--title-color);
-    margin: 18px 0 6px;
+    font-size: 30px;
+    font-weight: normal;
+    line-height: 1.2;
+    margin: 24px 0 12px;
 }
 
 .project p {
-    text-align: left;
-    font-size: 17px;
-    line-height: 1.45;
-    margin: 10px 0;
+    font-size: 19px;
+    margin: 0 0 16px;
 }
 
-.project .project-lede { color: var(--title-color); }
+.project .project-lede {
+    font-style: italic;
+    font-size: 21px;
+}
 
 .project-links {
-    list-style: none;
-    padding: 0;
-    margin: 16px 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    margin-top: 20px;
 }
 
-.project-links a {
-    color: var(--button-text-color);
-    text-decoration: none;
-    border: 1px solid var(--button-color);
-    border-radius: 2px;
-    padding: 8px 14px;
-    display: inline-block;
-}
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 24px 16px 32px;
+    }
 
-.project-links a:hover {
-    background-color: var(--button-hover-color);
-    color: var(--button-hover-text-color);
-}
+    header .container {
+        padding-top: 40px;
+    }
 
-@media screen and (max-width: 700px) {
-    .tabs { justify-content: center; }
-    .project-body { padding: 4px 16px 16px; }
-    .project p { font-size: 17px; }
+    .project-shot {
+        width: calc(100vw - 32px);
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .profile {
+        width: 104px;
+        height: 104px;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    p {
+        font-size: 19px;
+    }
+
+    /* Stack the demo's row labels above its canvases so the circuit gets the full width */
+    .project-demo .sodc-image-row {
+        grid-template-columns: 1fr;
+        gap: 0.2em;
+        margin: 0.2em 0;
+    }
+
+    .project-demo .sodc-image-label { text-align: left; }
+
+    .project p { font-size: 18px; }
+    .project .project-lede { font-size: 19px; }
 }
